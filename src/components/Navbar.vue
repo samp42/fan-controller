@@ -1,10 +1,10 @@
 <template>
     <ul>
-  <li><a class="dropdown">File</a>
+  <li class= "dropdown"><a class="dropButton">File</a>
        <div class = "dropContent">
-        <p>Load File</p>
-        <p>Save Pattern</p>
-        <p>Patterns</p>
+        <a>Load File</a>
+        <a>Save Pattern</a>
+        <a>Patterns</a>
        </div>
 </li>
   <li><a >Test</a></li>
@@ -25,7 +25,7 @@ li {
   float: left;
 }
 
-li a {
+li a, .dropButton {
   display: block;
   color: white;
   text-align: center;
@@ -33,12 +33,8 @@ li a {
   text-decoration: none;
 }
 
-li a:hover {
+li a:hover, .dropdown:hover .dropButton {
   background-color: #111;
-}
-.dropdown:hover {
-  position: relative;
-  display: inline-block;
 }
 
 .dropContent {
@@ -47,11 +43,20 @@ li a:hover {
   background-color: #f9f9f9;
   min-width: 160px;
   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-  padding: 12px 16px;
   z-index: 1;
 }
 
-.dropdown:hover .dropdown-content {
+.dropContent a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  text-align: left;
+}
+
+.dropContent a:hover {background-color: #f1f1f1;}
+
+.dropdown:hover .dropContent {
   display: block;
 }
 
