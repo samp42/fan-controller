@@ -76,7 +76,7 @@ button:hover {
 }
 button:active {
   border-color: black;
-  background-color: #e8e8e8;
+  background-color: #65656598;
 }
 
 input,
@@ -100,8 +100,8 @@ button {
 
   input,
   button {
-    color: #ffffff;
-    background-color: #0f0f0f98;
+    color: black;
+    background-color: #65656598;
   }
   button:active {
     background-color: #0f0f0f69;

@@ -7,12 +7,14 @@ import Navbar from "./components/Navbar.vue";
 </script>
 
 <template >
-    <Navbar/>
+<Navbar/>
   <h2 > PatternName</h2>
   <div class="row">
   <div class="column left" style="overflow-x:auto;">
+  <form>
   <Table >   </Table>
-  <button type="button">Clear</button>
+  <button type="reset">Clear</button>
+  </form>
 </div>
 <div class="column right">
   <label> Fan speed:</label>
