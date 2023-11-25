@@ -2,7 +2,6 @@
 <table id="table" class="table" aria-describedby="fan inputs">
 	<th></th>
 	<tbody>
-		<!-- 9x9 grid of inputs using v-for -->
 		<tr v-for="row in 9" :key="row">
 			<td v-for="col in 9" :key="col">
 				<input
@@ -10,24 +9,8 @@
 					:ref="`r${row}c${col}`"
 					:id="`r${row}c${col}`"
 					v-model="grid[9*(row - 1) + col - 1]"
-					:class="{ 'red': grid[9*(row - 1) + col - 1] == 1, 'green': grid[9*(row - 1) + col - 1] == 2, 'blue': grid[9*(row - 1) + col - 1] == 3 }"
+					:class="getColor(row, col)"
 				/>
-			</td>
-		</tr>
-	</tbody>
-</table>
-
-<table class="table" aria-describedby="fan display">
-	<th></th>
-	<tbody>
-		<!-- 9x9 grid of inputs using v-for -->
-		<tr v-for="row in 9" :key="row">
-			<td v-for="col in 9" :key="col">
-				<span
-					:ref="`r${row}c${col}`"
-					:id="`r${row}c${col}`"
-					v-text="grid[9*(row - 1) + col - 1]"
-					/>
 			</td>
 		</tr>
 	</tbody>
@@ -47,6 +30,28 @@ export default {
 	onUpdated() {
 		console.log(this.grid);
 	},
+	methods: {
+		getColor(row: number, column: number) {
+			const gridValue = this.grid[9 * (row - 1) + column - 1];
+
+			// check if gridValue contains only numbers
+			if(isNaN(gridValue as number)) {
+				return '';
+			}
+
+			const value = gridValue as number;
+
+			if(value < 25) {
+				return 'green';
+			} else if(value < 50) {
+				return 'yellow';
+			} else if(value < 75) {
+				return 'orange';
+			}
+
+			return 'red';
+		}
+	}
 };
 </script>
 
@@ -54,6 +59,8 @@ export default {
 * { box-sizing: border-box; }
 input {
     background-color: white;
+	border-radius: 0;
+	border: 0;
 	box-shadow: none;
 	width: 72px;
 	padding: 12px 4px;
@@ -77,30 +84,22 @@ tr {
 td {
     border: 1px solid black; 
 	text-align: center;
-	padding: none;
-}
-
-[data-color="red"] {
-  background-color: color(xyz 45 20 0);
-}
-
-[data-color="green"] {
-  background-color: color(xyz-d50 0.3 80 0.3);
-}
-
-[data-color="blue"] {
-  background-color: color(xyz-d65 5 0 50);
-}
-
-.red {
-	background-color: color(xyz 45 20 0);
+	padding: 0;
 }
 
 .green {
 	background-color: color(xyz-d50 0.3 80 0.3);
 }
 
-.blue {
-	background-color: color(xyz-d65 5 0 50);
+.yellow {
+	background-color: yellow;
+}
+
+.orange {
+	background-color: orange;
+}
+
+.red {
+	background-color: red;
 }
 </style>
