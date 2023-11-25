@@ -88,7 +88,7 @@ td {
 }
 
 .green {
-	background-color: color(xyz-d50 0.3 80 0.3);
+	background-color: green;
 }
 
 .yellow {
