@@ -1,18 +1,15 @@
 <script setup lang="ts">
-// This starter template is using Vue 3 <script setup> SFCs
-// Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
-//import Greet from "./components/Greet.vue";
 import Table from "./components/Table.vue";
 import Navbar from "./components/Navbar.vue";
 </script>
 
 <template >
 <Navbar/>
-  <h2 > PatternName</h2>
+  <h2>PatternName</h2>
   <div class="row">
   <div class="column left" style="overflow-x:auto;">
   <form>
-  <Table >   </Table>
+  <Table></Table>
   <button type="reset">Clear</button>
   </form>
 </div>
