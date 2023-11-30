@@ -41,11 +41,14 @@ export default {
 
 			const value = gridValue as number;
 
-			if(value < 25) {
+			if(value <= 0 || value>100) {
+				return 'white';
+			} else if(value > 0 && value <= 25) {
 				return 'green';
-			} else if(value < 50) {
+			} else if(value > 25 && value <= 50) {
 				return 'yellow';
-			} else if(value < 75) {
+			}
+			else if(value > 50 && value <= 75) {
 				return 'orange';
 			}
 
@@ -102,4 +105,8 @@ td {
 .red {
 	background-color: red;
 }
+.white {
+	background-color: white;
+}
+
 </style>
