@@ -2,11 +2,15 @@
     <ul>
   <li class= "dropdown"><a class="dropButton">File</a>
        <div class = "dropContent">
-        <a>Load File</a>
-        <a>Save Pattern</a>
+        <a href =loadFile() target="_top">Load File</a>
+       <!-- <router-link to="/loadFile">Load File</router-link>
+        <router-view></router-view>-->
+       <!-- <input type='file' accept=".csv" id="UploadFile">-->
+        <a href="C:\Users\" target="_blank">Save Pattern</a>
         <a>Patterns</a>
        </div>
 </li>
+  <li><a>Connect</a></li>
   <li><a >Test</a></li>
 
 </ul>
@@ -24,7 +28,6 @@ ul {
 li {
   float: left;
 }
-
 li a, .dropButton {
   display: block;
   color: white;

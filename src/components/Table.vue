@@ -41,7 +41,7 @@ export default {
 
 			const value = gridValue as number;
 
-			if(value <= 0 || value>100) {
+			/*if(value <= 0 || value>100) {
 				return 'white';
 			} else if(value > 0 && value <= 25) {
 				return 'green';
@@ -52,7 +52,25 @@ export default {
 				return 'orange';
 			}
 
-			return 'red';
+			return 'red';*/
+
+			if(value <= 0 || value>100) {
+				return 'white';
+			} else if(value > 0 && value <= 15) {
+				return 'lightBlue';
+			} else if(value > 15 && value <= 30) {
+				return 'blue';
+			} else if(value > 30 && value <= 45) {
+				return 'darkBlue';
+			} else if(value > 45 && value <= 60) {
+				return 'darkPurple';
+			} else if(value > 60 && value <= 75) {
+				return 'purple';
+			}
+			else if(value > 75 && value <= 90) {
+				return 'darkPink';
+			}
+			return 'pink';
 		}
 	}
 };
@@ -106,7 +124,50 @@ td {
 	background-color: red;
 }
 .white {
-	background-color: white;
+	background-color: rgb(255, 255, 255);
+}
+/*.lightBlue {
+	background-color: rgb(28, 98, 249);
+}
+.blue {
+	background-color: rgb(23, 57, 230);
+}
+.darkBlue {
+	background-color: rgb(6, 30, 218);
+}
+.darkPurple{
+	background-color: rgb(68, 1, 226);
+}
+.purple{
+	background-color: rgb(129, 4, 255);
+}
+.darkPink {
+	background-color: rgb(169, 2, 247);
+}
+.pink {
+	background-color: rgb(227, 2, 247);
 }
 
+*/
+.lightBlue {
+	background-color: rgba(28, 98, 249, 0.621);
+}
+.blue {
+	background-color: rgba(23, 58, 230, 0.687);
+}
+.darkBlue {
+	background-color: rgba(6, 31, 218, 0.696);
+}
+.darkPurple{
+	background-color: rgba(68, 1, 226, 0.676);
+}
+.purple{
+	background-color: rgba(130, 4, 255, 0.687);
+}
+.darkPink {
+	background-color: rgba(169, 2, 247, 0.644);
+}
+.pink {
+	background-color: rgba(227, 2, 247, 0.667);
+}
 </style>
