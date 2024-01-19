@@ -2,10 +2,9 @@
 import Table from "./components/Table.vue";
 import Navbar from "./components/Navbar.vue";
 
-function Clear(){
-Table.fill(0);
+function Clear() {
+  Table.fill(0);
 }
-
 </script>
 
 <template >

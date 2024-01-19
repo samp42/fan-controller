@@ -1,22 +1,36 @@
 <template>
-    <ul>
-  <li class= "dropdown"><a class="dropButton">File</a>
-       <div class = "dropContent">
-        <a href =loadFile() target="_top">Load File</a>
-       <!-- <router-link to="/loadFile">Load File</router-link>
-        <router-view></router-view>-->
-       <!-- <input type='file' accept=".csv" id="UploadFile">-->
-        <a href="C:\Users\" target="_blank">Save Pattern</a>
-        <a>Patterns</a>
-       </div>
-</li>
-  <li><a>Connect</a></li>
-  <li><a >Test</a></li>
-
-</ul>
-  </template>
+  <ul>
+    <li class="dropdown">
+      <a class="dropButton">File</a>
+      <div class = "dropContent">
+        <button class="navbar-button">Load File</button>
+        <button class="navbar-button">Patterns</button>
+        <button class="navbar-button">Save Pattern</button>
+      </div>
+    </li>
+    <li><a>Connect</a></li>
+    <li><a >Test</a></li>
+  </ul>
+</template>
 
 <style>
+.navbar-button {
+  width: 100%;
+  background: none;
+  border: none;
+  box-shadow: none;
+  text-align: left;
+  border-radius: 0;
+}
+
+.navbar-button:hover {
+  background-color: #eee;
+}
+
+.navbar-button:active {
+  background-color: #aaa;
+}
+
 ul {
   list-style-type: none;
   margin: 0;
