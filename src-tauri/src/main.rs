@@ -7,9 +7,18 @@ fn greet(name: &str) -> String {
     format!("Hello, {}! You've been greeted from Rust!", name)
 }
 
+#[tauri::command]
+fn list_serial_ports() -> Vec<String> {
+    serialport::available_ports()
+        .unwrap_or(vec![])
+        .iter()
+        .map(|port| port.clone().port_name)
+        .collect()
+}
+
 fn main() {
     tauri::Builder::default()
-        .invoke_handler(tauri::generate_handler![greet])
+        .invoke_handler(tauri::generate_handler![greet, list_serial_ports])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
