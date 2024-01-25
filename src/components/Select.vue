@@ -1,8 +1,7 @@
 <template>
   <div class="select-container">
     <select class="navbar-button">
-      <option>Teensy</option>
-      <option>Arduino</option>
+      <option v-for="(option, index) in selectOptions" :key="index">{{ option }}</option>
     </select>
   </div>
 </template>
@@ -32,3 +31,13 @@
   border-color: #fff transparent transparent transparent;
 } */
 </style>
+
+<script setup lang="ts">
+import { onMounted } from 'vue';
+const props = defineProps({selectOptions: Array<String>});
+
+onMounted(() => {
+  console.log(props);
+  console.log(props.selectOptions);
+});
+</script>
