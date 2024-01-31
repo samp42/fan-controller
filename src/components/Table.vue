@@ -1,20 +1,27 @@
 <template>
-<table id="table" class="table" aria-describedby="fan inputs">
-	<th></th>
-	<tbody>
-		<tr v-for="row in 9" :key="row">
-			<td v-for="col in 9" :key="col">
-				<input
-					type="text"
-					:ref="`r${row}c${col}`"
-					:id="`r${row}c${col}`"
-					v-model="grid[9*(row - 1) + col - 1]"
-					:class="getColor(row, col)"
-				/>
-			</td>
-		</tr>
-	</tbody>
-</table>
+<div class= "layout">
+	<div class = "square">
+		<div class = "content">
+			<table id="table" class="table" aria-describedby="fan inputs">
+				<th></th>
+				<tbody>
+					<tr v-for="row in 9" :key="row">
+						<td v-for="col in 9" :key="col">
+							<input
+								type="text"
+								:ref="`r${row}c${col}`"
+								:id="`r${row}c${col}`"
+								v-model="grid[9*(row - 1) + col - 1]"
+								:class="getColor(row, col)"
+								style="overflow:visible;"
+							/>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
 </template>
 
 <script lang="ts">
@@ -41,19 +48,6 @@ export default {
 
 			const value = gridValue as number;
 
-			/*if(value <= 0 || value>100) {
-				return 'white';
-			} else if(value > 0 && value <= 25) {
-				return 'green';
-			} else if(value > 25 && value <= 50) {
-				return 'yellow';
-			}
-			else if(value > 50 && value <= 75) {
-				return 'orange';
-			}
-
-			return 'red';*/
-
 			if(value <= 0 || value>100) {
 				return 'white';
 			} else if(value > 0 && value <= 15) {
@@ -78,50 +72,46 @@ export default {
 
 <style scoped>
 * { box-sizing: border-box; }
+
+.layout{
+	position: relative;
+	width:100%;
+}
+.square{
+	padding-bottom: 75%;
+}
+.content {
+	position: absolute;
+	top: 0; 
+	bottom: 0; 
+	left: 0; 
+	right: 0; 
+}
 input {
     background-color: white;
 	border-radius: 0;
 	border: 0;
+	text-align: center;
 	box-shadow: none;
-	width: 72px;
-	padding: 12px 4px;
-	text-align: end;
+	width: 100%;
+	height:100%;
+	top:50%;
+	left:50%;
 }
-
-table {
-    border: 1px solid black; 
+table{
+	border: 1px solid black; 
     justify-content: center;
 	border-spacing: 0;
+	width:100%;
+	height:100%;
+	padding: 0; 
 }
-
-th {
-	display: none;
-}
-
-tr {
-    border: 1px solid black;
-}
-
+th { display: none;}
+tr { border: 1px solid black;}
 td {
     border: 1px solid black; 
 	text-align: center;
 	padding: 0;
-}
-
-.green {
-	background-color: green;
-}
-
-.yellow {
-	background-color: yellow;
-}
-
-.orange {
-	background-color: orange;
-}
-
-.red {
-	background-color: red;
 }
 .white {
 	background-color: rgb(255, 255, 255);
@@ -147,7 +137,6 @@ td {
 .pink {
 	background-color: rgb(227, 2, 247);
 }
-
 */
 .lightBlue {
 	background-color: rgba(28, 98, 249, 0.621);
@@ -170,4 +159,5 @@ td {
 .pink {
 	background-color: rgba(227, 2, 247, 0.667);
 }
+
 </style>

@@ -12,6 +12,7 @@
 </li>
   <li><a>Connect</a></li>
   <li><a >Test</a></li>
+  <li class="help"><a href= >Help</a></li>
 
 </ul>
   </template>
@@ -35,7 +36,9 @@ li a, .dropButton {
   padding: 14px 16px;
   text-decoration: none;
 }
-
+.help {
+  float:right;
+}
 li a:hover, .dropdown:hover .dropButton {
   background-color: #111;
 }
