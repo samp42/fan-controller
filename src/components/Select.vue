@@ -33,11 +33,16 @@
 </style>
 
 <script setup lang="ts">
-import { onMounted } from 'vue';
+// import { onBeforeMount } from 'vue';
 const props = defineProps({selectOptions: Array<String>});
 
-onMounted(() => {
-  console.log(props);
-  console.log(props.selectOptions);
-});
+// onMounted(() => {
+//   console.log(props);
+//   console.log(props.selectOptions);
+// });
+
+// beforeCreate = () => {
+//   console.log(props);
+//   console.log(props.selectOptions);
+// }
 </script>

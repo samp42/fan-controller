@@ -12,13 +12,14 @@
       <button class="navbar-button">Help</button>
     </div>
     <div class="navbar-select-container">
-      <Select :select-options="ports"></Select>
+      <button class="navbar-button" @click="list">Refresh</button>
+      <Select :v-if="ports" :select-options="ports"></Select>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { onMounted } from 'vue';
+import { onBeforeMount } from 'vue';
 import { invoke } from "@tauri-apps/api";
 import Select from "./Select.vue";
 
@@ -27,10 +28,11 @@ let ports: string[];
 function list() {
   invoke('list_serial_ports').then((p: any) => {
     ports = p;
+    console.log(ports);
   });
 }
 
-onMounted(() => {
+onBeforeMount(() => {
   list();
 });
 </script>
@@ -43,6 +45,7 @@ onMounted(() => {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  box-shadow: 0 -2px 16px 8px #333;
 }
 
 .navbar-elements {
@@ -117,5 +120,6 @@ li {
 
 .navbar-select-container {
   margin-right: 12px;
+  display: flex;
 }
 </style>
