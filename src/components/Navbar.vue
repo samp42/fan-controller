@@ -12,7 +12,7 @@
 </li>
   <li><a>Connect</a></li>
   <li><a >Test</a></li>
-  <li class="help"><a href= >Help</a></li>
+  <li class="help"><a >Help</a></li>
 
 </ul>
   </template>
