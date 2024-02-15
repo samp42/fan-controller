@@ -1,34 +1,32 @@
 <template>
-  <div class="navbar-container">
-    <div class="navbar-elements">
+  <div class="header-container">
+    <div class="header-elements">
       <div class="dropdown">
-        <button class="navbar-button dropButton">File</button>
+        <button class="header-button dropButton">File</button>
         <div class="dropContent">
           <button class="dropdown-button">Load File</button>
-          <button class="dropdown-button">Patterns</button>
           <button class="dropdown-button">Save Pattern</button>
         </div>
+        <button class="header-button">Patterns</button>
       </div>
-      <button class="navbar-button">Help</button>
     </div>
     <div class="navbar-select-container">
-      <button class="navbar-button" @click="list">Refresh</button>
-      <Select :v-if="ports" :select-options="ports"></Select>
+      <button class="refresh-button" @click="list">Refresh</button>
+      <Select :select-options="ports"></Select>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { onBeforeMount } from 'vue';
+import { ref, onBeforeMount } from 'vue';
 import { invoke } from "@tauri-apps/api";
 import Select from "./Select.vue";
 
-let ports: string[];
+const ports = ref([]);
 
 function list() {
   invoke('list_serial_ports').then((p: any) => {
-    ports = p;
-    console.log(ports);
+    ports.value = p;
   });
 }
 
@@ -38,22 +36,23 @@ onBeforeMount(() => {
 </script>
 
 <style>
-.navbar-container {
+.header-container {
   overflow: hidden;
   background-color: #333;
   height: 54px;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  box-shadow: 0 -2px 16px 8px #333;
+  align-items: center;
+  box-shadow: 0 -2px 8px 4px #333;
 }
 
-.navbar-elements {
+.header-elements {
   display: flex;
   flex-direction: row;
 }
 
-.navbar-button {
+.header-button {
   background: none;
   border: none;
   box-shadow: none;
@@ -62,7 +61,17 @@ onBeforeMount(() => {
   height: 100%;
 }
 
-.navbar-button:hover {
+.refresh-button {
+  border: none;
+  box-shadow: none;
+
+  color: white;
+  height: 100%;
+  margin-right: 12px;
+
+}
+
+.header-button:hover {
   color: rgb(0, 208, 255);
 }
 

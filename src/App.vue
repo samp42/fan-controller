@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import Table from "./components/Table.vue";
-import Navbar from "./components/Navbar.vue";
+import Header from "./components/Header.vue";
+import { RouterView } from "vue-router";
 
 function clear(){
   Table.fill(0);
@@ -8,21 +9,19 @@ function clear(){
 </script>
 
 <template >
-<Navbar/>
-  <h2 class="header">PatternName</h2>
-  <br>
-  <div style="overflow-x:auto;">
+<Header/>
+<!-- <h2 class="header">PatternName</h2>
+<div style="overflow-x:auto;">
   <form>
     <div class ="center">
     <Table></Table>
-    <div class="button">
-      <button onclick="clear()">Clear</button>
+    <div class="">
+      <button @click="clear()">Clear</button>
     </div>
     </div>
   </form>
-</div>
-
- <br>  
+</div>  -->
+<RouterView></RouterView>
 </template>
 
 <style>
