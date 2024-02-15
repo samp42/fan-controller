@@ -27,7 +27,7 @@
 </div>
 <div class = "select">
 <button type="button" @click="clear()">Clear</button>
-<button type="button" @click="randomFill()">Random Fill</button>
+<!--<button type="button" @click="randomFill()">Random Fill</button>
 <button type="button" @click="checkerBoard(3, true)">checkboard even</button>
 <button type="button" @click="checkerBoard(3, false)">reverse checkboard odd</button>
 <button type="button" @click="singleRow(2, 50, true)">row on</button>
@@ -45,6 +45,7 @@
 <button type="button" @click="gradient(0, 81, true, false)">inv row gradient</button>
 <button type="button" @click="gradient(3, 99, false, true)">col gradient</button>
 <button type="button" @click="gradient(14, 78, false, false)">inv col gradient</button>
+-->
 </div>
 
 </template>

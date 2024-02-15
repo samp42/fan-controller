@@ -7,7 +7,7 @@
         <router-view></router-view>-->
        <!-- <input type='file' accept=".csv" id="UploadFile">-->
         <a href="C:\Users\" target="_blank">Save Pattern</a>
-        <a>Patterns</a>
+        <a href ="./Patterns.vue">Patterns</a>
        </div>
 </li>
   <li><a>Connect</a></li>
