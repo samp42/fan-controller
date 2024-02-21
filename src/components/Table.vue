@@ -2,7 +2,7 @@
 <div class= "layout">
 	<div class = "square">
 		<div class = "content">
-			<table id="table" class="table" aria-describedby="fan inputs">
+			<table id="table" class="table" aria-describedby="fan inputs" ref="table">
 				<th></th>
 				<tbody>
 					<tr v-for="row in 9" :key="row">
@@ -49,14 +49,15 @@
 </div>
 
 </template>
-
+; 
 <script lang="ts">
 export default {
 	data() {
 		return {
 			//grid: Array<Number>(81).fill(0)
 				grid: Array(81).fill(0).map(() => ({ value: 0, disabled: false })),
-		};
+
+			};
 	},
 	mounted() {
 		console.log(this.grid);
@@ -192,9 +193,7 @@ gradient(min: number, max: number, row: boolean, on: boolean) {
       this.grid[size * i + j] = { value: displayValue, disabled: false };
     }
   }
-}
-
-,
+},
 	clear(){
 		this.grid.fill({ value: 0, disabled: false });
 	}, 
@@ -208,9 +207,7 @@ gradient(min: number, max: number, row: boolean, on: boolean) {
         this.grid[index] = { ...this.grid[index], value: numOnly, disabled: false };
     }
 }
-
 }
-
 };
 
 

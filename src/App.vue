@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import Table from "./components/Table.vue";
 import Header from "./components/Header.vue";
 import { RouterView } from "vue-router";
 </script>
