@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import Table from "./components/Table.vue";
 import Header from "./components/Header.vue";
 import { RouterView } from "vue-router";
 </script>
 
-
-<template >
-<Header/>
-<!-- <h2 class="header">PatternName</h2>
+<template>
+  <div>
+    <Header class="header"/>
+  </div>
+  <!-- <h2 class="header">PatternName</h2>
 <div style="overflow-x:auto;">
   <form>
     <div class="center">
@@ -18,33 +18,23 @@ import { RouterView } from "vue-router";
     </div>
   </form>
 </div> -->
-<RouterView></RouterView>
+  <div class="app-content">
+    <RouterView></RouterView>
+  </div>
 </template>
 
 <style>
-.layout {  
-  min-width:200px; 
-}
 .header {
-text-align: center;
-}
-.center {
-  min-width:600px;
-  margin: auto;
-  width: 40%;
   text-align: center;
-  box-sizing: border-box;
+  position: fixed;
+  width: 100%;
+  left: 0;
+  top: 0;
+  z-index: 100;
 }
-.column{
-  float:center; 
-}
-.button{
-justify-content: flex-end;
-text-align: center;
-}
-.row::after {
-  content: "";
-  display: table;
-  clear: both;
+
+.app-content {
+  margin-top: 54px;
+  overflow: scroll;
 }
 </style>
