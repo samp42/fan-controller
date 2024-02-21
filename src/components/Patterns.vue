@@ -1,10 +1,10 @@
 <template>
 <h1>Patterns</h1>
-<div >
+<div classe = "update">
     <div class = page>
         <div>
             <a target="_blank" href="">
-            <img src="" alt="" width="600" height="400">
+            <img src="" alt="" width="400" height="400">
             </a>
             <div class="desc">Pattern name</div>
         </div>
@@ -15,7 +15,7 @@
     <div class = page>
         <div>
             <a target="_blank" href="">
-            <img src="" alt="" width="600" height="400">
+            <img src="" alt="" width="400" height="400">
             </a>
             <div class="desc">Pattern name</div>
         </div>
@@ -26,7 +26,7 @@
     <div class = page>
         <div>
             <a target="_blank" href="">
-            <img src="" alt="" width="600" height="400">
+            <img src="" alt="" width="400" height="400">
             </a>
             <div class="desc">Pattern name</div>
         </div>
@@ -37,7 +37,7 @@
     <div class = page>
         <div>
             <a target="_blank" href="">
-            <img src="" alt="" width="600" height="400">
+            <img src="" alt="" width="400" height="400">
             </a>
             <div class="desc">Pattern name</div>
         </div>
@@ -48,7 +48,7 @@
     <div class = page>
         <div>
             <a target="_blank" href="">
-            <img src="" alt="" width="600" height="400">
+            <img src="" alt="" width="400" height="400">
             </a>
             <div class="desc">Pattern name</div>
         </div>
@@ -59,7 +59,7 @@
     <div class = page>
         <div>
             <a target="_blank" href="">
-            <img src="" alt="" width="600" height="400">
+            <img src="" alt="" width="400" height="400">
             </a>
             <div class="desc">Pattern name</div>
         </div>
@@ -70,7 +70,7 @@
     <div class = page>
         <div>
             <a target="_blank" href="">
-            <img src="" alt="" width="600" height="400">
+            <img src="" alt="" width="400" height="400">
             </a>
             <div class="desc">Pattern name</div>
         </div>
@@ -94,7 +94,7 @@
     height: auto; 
 }
 
-.page name{
+.name{
     text-align:center;
 }
 
