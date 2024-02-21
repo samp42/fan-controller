@@ -1,3 +1,8 @@
+<script setup lang="ts">
+//import { RouterLink } from "vue-router";
+//import Table from "./Table.vue";
+</script>
+
 <template>
     <ul>
   <li class= "dropdown"><a class="dropButton">File</a>
@@ -7,7 +12,7 @@
         <router-view></router-view>-->
        <!-- <input type='file' accept=".csv" id="UploadFile">-->
         <a href="C:\Users\" target="_blank">Save Pattern</a>
-        <a href ="./Patterns.vue">Patterns</a>
+        <RouterLink to="/pattern" class="help-link">Patterns</RouterLink>
        </div>
 </li>
   <li><a>Connect</a></li>
@@ -18,6 +23,16 @@
   </template>
 
 <style>
+.help-link {
+    text-decoration: none;
+    color: black;
+    position: absolute;
+    right: 8px;
+    top: 64px;
+    padding: 6px 18px;
+    border-radius: 4px;
+    background-color: #666;
+}
 ul {
   list-style-type: none;
   margin: 0;
