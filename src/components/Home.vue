@@ -40,7 +40,7 @@ import Table from "./Table.vue";
     
     .table {
         /* width: 60%; */
-        height: 
+        /* height:  */
     }
 }
 </style>
