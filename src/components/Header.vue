@@ -7,9 +7,11 @@
           <button class="dropdown-button">Load File</button>
           <button class="dropdown-button">Save Pattern</button>
         </div>
-        <RouterLink to="/patterns" class="header-button dropButton">Patterns</RouterLink>
+        <RouterLink to="/patterns" class="header-button">Patterns</RouterLink>
       </div>
+      
     </div>
+
     <div class="navbar-select-container">
       <button class="refresh-button" @click="list">Refresh</button>
       <Select :select-options="ports"></Select>

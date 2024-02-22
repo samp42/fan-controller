@@ -1,4 +1,8 @@
 <template>
+<div class="title">
+<input class ="pattern" id="pattern" type ="text" placeholder="Pattern name">
+<button type="button" @click="getPattern()">Enter</button>
+</div>
 <div class= "layout">
 	<div class = "square">
 		<div class = "content">
@@ -50,7 +54,7 @@
 
 </template>
 ; 
-<script lang="ts">
+<script lang="ts">	
 export default {
 	data() {
 		return {
@@ -66,6 +70,46 @@ export default {
 		console.log(this.grid);
 	},
 	methods: {
+		getPattern(){
+			var input = (<HTMLInputElement>document.getElementById("pattern")).value; 
+			switch(input){
+				case "random":
+					this.randomFill() ; 
+				break; 
+				case "gradient":
+					this.gradient(5, 95, true, true);
+				break; 
+				case "alternate rows": 
+					this.altRows(1, 50, true); 
+				break; 
+				case "row on":
+					this.singleRow(1, 50, true); 
+				break;
+				case "row off":
+					this.singleRow(2, 50, false); 
+				break; 
+				case "alternate columns":
+					this.altCols(1, 50, true); 
+				break; 
+				case "column on":
+					this.singleCol(1, 50, true); 
+				break; 
+				case "column off":
+					this.singleCol(3, 30, false); 
+				break;
+				case "middle":
+					this.middle(50, true); 
+				break;
+				case "grid":
+					this.gridPattern(50,1,2, false);
+				break; 
+				case "checkerboard":
+					this.checkerBoard(1, true);
+				break; 
+
+			}
+			
+		},
 		getColor(row: number, column: number) {
 			const gridValue = this.grid[9 * (row - 1) + column - 1];
 
@@ -256,9 +300,22 @@ td {
 	text-align: center;
 	padding: 0;
 }
+.pattern {
+	color: black;
+    background-color: #65656598;
+	border-radius: 8px;
+  border: 1px solid transparent;
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
+}
+
 .button{
 justify-content: flex-end;
 text-align: center;
+}
+.title{
+	display: flex;
+	align-items: center;
+	
 }
 .white {
 	background-color: rgb(255, 255, 255);

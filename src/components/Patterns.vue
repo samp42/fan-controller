@@ -1,4 +1,6 @@
-<script setup lang="ts"> 
+<script lang="ts"> 
+import { RouterLink } from "vue-router";
+
 </script>
 <template>
  <div >
@@ -10,9 +12,9 @@
     <h1>Patterns</h1>
     <div class="update">
         <div class = "page">
-                <Router-Link to="/" >
+                <RouterLink to="/" >
                 <img src="src/images/alt.png" alt="alternate rows" width="400" height="400">
-                </Router-Link>
+                </RouterLink>
                 <div class="name">Alternate rows</div>
         </div>
     </div>
@@ -29,7 +31,23 @@
           <Router-Link to="/">
                 <img src="src/images/row off.png" alt="row off" width="400" height="400">
               </Router-Link>
-                <div class="name">Alternate rows</div>
+                <div class="name">Row off</div>
+        </div>
+    </div>
+    <div class="update">
+        <div class = "page">
+          <Router-Link to="/">
+                <img src="src/images/col off.png" alt="row off" width="400" height="400">
+              </Router-Link>
+                <div class="name">column off</div>
+        </div>
+    </div>
+    <!--<div class="update">
+        <div class = "page">
+          <Router-Link to="/">
+                <img src="src/images/row off.png" alt="row off" width="400" height="400">
+              </Router-Link>
+                <div class="name">alternate columns</div>
         </div>
     </div>
     <div class="update">
@@ -37,9 +55,26 @@
           <Router-Link to="/">
                 <img src="src/images/row off.png" alt="row off" width="400" height="400">
               </Router-Link>
-                <div class="name">Alternate rows</div>
+                <div class="name">Middle</div>
         </div>
     </div>
+    <div class="update">
+        <div class = "page">
+          <Router-Link to="/">
+                <img src="src/images/row off.png" alt="row off" width="400" height="400">
+              </Router-Link>
+                <div class="name">CheckerBoard</div>
+        </div>
+    </div>
+
+    <div class="update">
+        <div class = "page">
+          <Router-Link to="/">
+                <img src="src/images/row off.png" alt="row off" width="400" height="400">
+              </Router-Link>
+                <div class="name">Grid</div>
+        </div>
+    </div>-->
     </template>
     
     <style>
