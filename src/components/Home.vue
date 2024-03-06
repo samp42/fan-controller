@@ -6,7 +6,7 @@ import Table from "./Table.vue";
 <template>
     <RouterLink to="/help" class="help-link">Help</RouterLink>
     <div class="home-layout">
-        <input type="text" placeholder="Pattern Name" />
+        <!--<input type="text" placeholder="Pattern Name" />-->
         <div class="table-container">
             <Table class="table"></Table>
         </div>

@@ -1,8 +1,15 @@
 <template>
+<div class="title">
+<input class ="pattern" id="pattern" type ="text" placeholder="Pattern Name">
+
+<button type="button" @click="getPattern()">Enter</button>
+</div>
+<!--<input id="speed" type = "number" placeholder =0 style = "visibility:hidden">-->
+<input id="speed" type = "text" placeholder = "speed" >
 <div class= "layout">
 	<div class = "square">
 		<div class = "content">
-			<table id="table" class="table" aria-describedby="fan inputs">
+			<table id="table" class="table" aria-describedby="fan inputs" ref="table">
 				<th></th>
 				<tbody>
 					<tr v-for="row in 9" :key="row">
@@ -26,36 +33,18 @@
 </div>
 <div class = "select">
 <button type="button" @click="clear()">Clear</button>
-<!--<button type="button" @click="randomFill()">Random Fill</button>
-<button type="button" @click="checkerBoard(3, true)">checkboard even</button>
-<button type="button" @click="checkerBoard(3, false)">reverse checkboard odd</button>
-<button type="button" @click="singleRow(2, 50, true)">row on</button>
-<button type="button" @click="singleRow(2, 50,false)">row off</button>
-<button type="button" @click="singleCol(2, 50, true)">col on</button>
-<button type="button" @click="singleCol(2, 50, false)">row on</button>
-<button type="button" @click="altRows(2, 50, true)">alt rows ON/OFF</button>
-<button type="button" @click="altRows(2, 50, false)">alt rows OFF/ON</button>
-<button type="button" @click="altCols(2, 50, true)">alt col ON/OFF</button>
-<button type="button" @click="altCols(2, 50, false)">alt col OFF/ON</button>
-<button type="button" @click="middle(50, true)">middle ON</button>
-<button type="button" @click="middle(50, false)">middle OFF</button>
-<button type="button" @click="gridPattern(50,1,2, false)">grid 2 on 2</button>
-<button type="button" @click="gradient(5, 95, true, true)">row gradient</button>
-<button type="button" @click="gradient(0, 81, true, false)">inv row gradient</button>
-<button type="button" @click="gradient(3, 99, false, true)">col gradient</button>
-<button type="button" @click="gradient(14, 78, false, false)">inv col gradient</button>
--->
 </div>
 
 </template>
-
-<script lang="ts">
+; 
+<script lang="ts">	
 export default {
 	data() {
 		return {
 			//grid: Array<Number>(81).fill(0)
 				grid: Array(81).fill(0).map(() => ({ value: 0, disabled: false })),
-		};
+
+			};
 	},
 	mounted() {
 		console.log(this.grid);
@@ -64,6 +53,52 @@ export default {
 		console.log(this.grid);
 	},
 	methods: {
+		getValue(){
+			var value = (<HTMLInputElement>document.getElementById("pattern")).value; 
+			return value; 
+		},
+		getPattern(){
+			var input = (<HTMLInputElement>document.getElementById("pattern")).value; 
+			var speed = (<HTMLInputElement>document.getElementById("speed")).value; 
+			switch(input){
+				case "random":
+					this.randomFill() ; 
+				break; 
+				case "gradient":
+					this.gradient(parseInt(speed), 95, true, true);
+				break; 
+				case "alternate rows": 
+					this.altRows(1, parseInt(speed), true); 
+				break; 
+				case "row on":
+					this.singleRow(1, parseInt(speed), true); 
+				break;
+				case "row off":
+					this.singleRow(2, parseInt(speed), false); 
+				break; 
+				case "alternate columns":
+					this.altCols(1, parseInt(speed), true); 
+				break; 
+				case "column on":
+					this.singleCol(1, parseInt(speed), true); 
+				break; 
+				case "column off":
+					this.singleCol(3, parseInt(speed), false); 
+				break;
+				case "middle":
+					this.middle(parseInt(speed), true); 
+				break;
+				case "grid":
+					this.gridPattern(parseInt(speed),1,2, false);
+				break; 
+				case "checkerboard":
+					this.checkerBoard(1,parseInt(speed), true);
+				break; 
+				default: 
+			(<HTMLInputElement>document.getElementById("pattern")).value = '';
+			}
+			
+		},
 		getColor(row: number, column: number) {
 			const gridValue = this.grid[9 * (row - 1) + column - 1];
 
@@ -104,7 +139,7 @@ randomFill() {
     }
   }
 },
-checkerBoard(size: number, rev: boolean) {
+checkerBoard(size: number, val: number, rev: boolean) {
   this.clear();
   for (let i = 0; i < 9; i++) {
     for (let j = 0; j < 9; j++) {
@@ -113,7 +148,7 @@ checkerBoard(size: number, rev: boolean) {
 
       const isEvenSquare = (isEvenRow && isEvenCol) || (!isEvenRow && !isEvenCol);
 
-      this.grid[9 * i + j] = { value: isEvenSquare ? (rev ? 100 : 0) : (rev ? 0 : 100), disabled: isEvenSquare };
+      this.grid[9 * i + j] = { value: isEvenSquare ? (rev ? val : 0) : (rev ? 0 : val), disabled: isEvenSquare };
     }
   }
 },
@@ -191,9 +226,7 @@ gradient(min: number, max: number, row: boolean, on: boolean) {
       this.grid[size * i + j] = { value: displayValue, disabled: false };
     }
   }
-}
-
-,
+},
 	clear(){
 		this.grid.fill({ value: 0, disabled: false });
 	}, 
@@ -207,9 +240,7 @@ gradient(min: number, max: number, row: boolean, on: boolean) {
         this.grid[index] = { ...this.grid[index], value: numOnly, disabled: false };
     }
 }
-
 }
-
 };
 
 
@@ -258,9 +289,22 @@ td {
 	text-align: center;
 	padding: 0;
 }
+.pattern {
+	color: black;
+    background-color: #65656598;
+	border-radius: 8px;
+  border: 1px solid transparent;
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
+}
+
 .button{
 justify-content: flex-end;
 text-align: center;
+}
+.title{
+	display: flex;
+	align-items: center;
+	
 }
 .white {
 	background-color: rgb(255, 255, 255);
