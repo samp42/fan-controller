@@ -1,13 +1,11 @@
 <script lang="ts"> 
 import { RouterLink } from "vue-router";
+import BackButton from "./BackButton.vue";
 
 </script>
 <template>
  <div >
-        <RouterLink to="/" class="back-link">
-            <!-- <img src="../assets/chevron-left.svg" alt="Back" /> -->
-            <p>Back</p>
-        </RouterLink>  
+        <BackButton></BackButton>  
       </div>   
     <h1>Patterns</h1>
     <div class="update">

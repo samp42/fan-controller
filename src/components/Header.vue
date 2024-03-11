@@ -8,6 +8,7 @@
           <button class="dropdown-button">Save Pattern</button>
         </div>
         <RouterLink to="/patterns" class="header-button">Patterns</RouterLink>
+        <RouterLink to="/help" class="header-button">Help</RouterLink>
       </div>
       
     </div>
@@ -20,7 +21,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onBeforeMount } from 'vue';
+import { ref, onBeforeMount } from "vue";
 import { invoke } from "@tauri-apps/api";
 import Select from "./Select.vue";
 

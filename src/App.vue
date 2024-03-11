@@ -4,8 +4,8 @@ import { RouterView } from "vue-router";
 </script>
 
 <template>
-  <div>
-    <Header class="header"/>
+  <div class="header">
+    <Header />
   </div>
   <!-- <h2 class="header">PatternName</h2>
 <div style="overflow-x:auto;">
@@ -36,5 +36,6 @@ import { RouterView } from "vue-router";
 .app-content {
   margin-top: 54px;
   overflow: scroll;
+  margin-bottom: 50px;
 }
 </style>

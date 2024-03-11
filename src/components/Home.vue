@@ -1,10 +1,8 @@
 <script setup lang="ts">
-import { RouterLink } from "vue-router";
 import Table from "./Table.vue";
 </script>
 
 <template>
-    <RouterLink to="/help" class="help-link">Help</RouterLink>
     <div class="home-layout">
         <!--<input type="text" placeholder="Pattern Name" />-->
         <div class="table-container">
@@ -14,17 +12,6 @@ import Table from "./Table.vue";
 </template>
 
 <style>
-.help-link {
-    text-decoration: none;
-    color: black;
-    position: absolute;
-    right: 8px;
-    top: 64px;
-    padding: 6px 18px;
-    border-radius: 4px;
-    background-color: #666;
-}
-
 .home-layout {
     display: flex;
     flex-direction: column;
