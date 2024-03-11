@@ -1,9 +1,9 @@
 <template>
-    <RouterLink to="/" class="back-link">
-        <div class="back-link-inner" @mouseover="toggleHover" @mouseout="toggleHover">
+    <RouterLink to="/" class="back-link" @mouseenter="toggleHover" @mouseleave="toggleHover">
+        <div class="back-link-inner">
             <img v-if="!isHovered" src="../assets/chevron-left.svg" alt="Back" class="chevron"/>
-            <img v-else src="../assets//chevron-left-hover.svg" alt="Back" class="chevron"/>
-            <p>Back</p>
+            <img v-else src="../assets/chevron-left-hover.svg" alt="Back" class="chevron"/>
+            <p class="back-label">Back</p>
         </div>
     </RouterLink>
 </template>
@@ -28,10 +28,14 @@ function toggleHover(): void {
     display: flex;
     flex-direction: row;
     align-items: center;
-    margin: 4px;
+    padding: 0 4px;
 }
 
 .chevron {
     height: 24px;
+}
+
+.back-label {
+    margin: 4px;
 }
 </style>

@@ -10,11 +10,12 @@
         <RouterLink to="/patterns" class="header-button">Patterns</RouterLink>
         <RouterLink to="/help" class="header-button">Help</RouterLink>
       </div>
-      
     </div>
 
     <div class="navbar-select-container">
-      <button class="refresh-button" @click="list">Refresh</button>
+      <button class="refresh-button" @click="list">
+        <img src="../assets/arrow-clockwise.svg" alt="refresh" class="refresh-img"/>
+      </button>
       <Select :select-options="ports"></Select>
     </div>
   </div>
@@ -33,9 +34,7 @@ function list() {
   });
 }
 
-onBeforeMount(() => {
-  list();
-});
+onBeforeMount(list);
 </script>
 
 <style>
@@ -71,7 +70,10 @@ onBeforeMount(() => {
   color: white;
   height: 100%;
   margin-right: 12px;
+}
 
+.refresh-img {
+  height: 24px;
 }
 
 .header-button:hover {

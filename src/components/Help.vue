@@ -29,5 +29,6 @@ Sed enim tortor, ultricies quis felis at, rhoncus bibendum ligula. Praesent fini
 <style>
 .help-content-container {
     margin: 0 48px;
+    text-align: justify;
 }
 </style>
