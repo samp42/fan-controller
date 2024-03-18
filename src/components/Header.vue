@@ -4,17 +4,23 @@
       <div class="dropdown">
         <button class="header-button dropButton">File</button>
         <div class="dropContent">
-          <button class="dropdown-button">Load File</button>
+          <button class="dropdown-button" @click="openFileInput">Load File</button>
+          <input type="file" ref="fileInput" style="display: none" />
           <button class="dropdown-button">Save Pattern</button>
         </div>
         <RouterLink to="/patterns" class="header-button">Patterns</RouterLink>
         <RouterLink to="/help" class="header-button">Help</RouterLink>
       </div>
     </div>
-
     <div class="navbar-select-container">
-      <button class="refresh-button" @click="list">
-        <img src="../assets/arrow-clockwise.svg" alt="refresh" class="refresh-img"/>
+      <button class="play-button action-button" @click="">
+        <img src="../assets/play.svg" alt="play" class="img-icon"/>
+      </button>
+      <button class="stop-button action-button" @click="">
+        <img src="../assets/stop.svg" alt="stop" class="img-icon"/>
+      </button>
+      <button class="refresh-button action-button" @click="list">
+        <img src="../assets/arrow-clockwise.svg" alt="refresh" class="img-icon"/>
       </button>
       <Select :select-options="ports"></Select>
     </div>
@@ -27,11 +33,16 @@ import { invoke } from "@tauri-apps/api";
 import Select from "./Select.vue";
 
 const ports = ref([]);
+const fileInputRef = ref<HTMLInputElement | null>(null);
 
-function list() {
+function list(): void {
   invoke('list_serial_ports').then((p: any) => {
     ports.value = p;
   });
+}
+
+function openFileInput(): void {
+  fileInputRef.value?.click();
 }
 
 onBeforeMount(list);
@@ -72,7 +83,18 @@ onBeforeMount(list);
   margin-right: 12px;
 }
 
-.refresh-img {
+.action-button {
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 20px;
+  margin-right: 8px;
+  padding: 0;
+  padding-top: 6px;
+  padding-left: 1px;
+}
+
+.img-icon {
   height: 24px;
 }
 
