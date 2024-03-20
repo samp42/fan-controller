@@ -9,9 +9,7 @@
         </div>
         <RouterLink to="/patterns" class="header-button">Patterns</RouterLink>
       </div>
-      
     </div>
-
     <div class="navbar-select-container">
       <button class="refresh-button" @click="list">Refresh</button>
       <Select :select-options="ports"></Select>

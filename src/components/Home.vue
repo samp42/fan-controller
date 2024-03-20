@@ -1,19 +1,23 @@
 <script setup lang="ts">
 import { RouterLink } from "vue-router";
 import Table from "./Table.vue";
+
+const defaultPattern = ''; 
 </script>
 
 <template>
     <RouterLink to="/help" class="help-link">Help</RouterLink>
-    <div class="home-layout">
+    <div style="overflow-x:auto;">
         <!--<input type="text" placeholder="Pattern Name" />-->
-        <div class="table-container">
-            <Table class="table"></Table>
+        <div class="center">
+            <Table class="table" :patternName="defaultPattern"></Table>
         </div>
     </div>
 </template>
 
 <style>
+	* { box-sizing: border-box; }
+
 .help-link {
     text-decoration: none;
     color: black;
@@ -26,8 +30,8 @@ import Table from "./Table.vue";
 }
 
 .home-layout {
+    min-width: 600px;  
     display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
     width: 100%;
@@ -37,10 +41,12 @@ import Table from "./Table.vue";
 .table-container {
     width: 60%;
     margin-top: 24px;
-    
+    display: center; 
+    justify-content: center;
+    align-items: center;
     .table {
-        /* width: 60%; */
-        /* height:  */
+        width: 100%;
+         height: 100%
     }
 }
 </style>

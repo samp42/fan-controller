@@ -3,8 +3,7 @@ import Header from "./components/Header.vue";
 import { RouterView } from "vue-router";
 </script>
 
-
-<template >
+<template>
 <Header/>
 <!-- <h2 class="header">PatternName</h2>
 <div style="overflow-x:auto;">
@@ -22,7 +21,7 @@ import { RouterView } from "vue-router";
 
 <style>
 .layout {  
-  min-width:200px; 
+  min-width:450px; 
 }
 .header {
 text-align: center;
