@@ -92,6 +92,7 @@ onBeforeMount(list);
   padding: 0;
   padding-top: 6px;
   padding-left: 1px;
+  background-color: #888;
 }
 
 .img-icon {
