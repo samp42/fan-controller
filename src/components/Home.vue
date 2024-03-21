@@ -5,7 +5,7 @@ const defaultPattern = '';
 </script>
 
 <template>
-    <div class="home-layout">
+    <div style="overflow-x:auto;">
         <!--<input type="text" placeholder="Pattern Name" />-->
         <div class="center">
             <Table class="table" :patternName="defaultPattern"></Table>
@@ -14,16 +14,16 @@ const defaultPattern = '';
 </template>
 
 <style>
-.home-layout {
+/* .home-layout {
     min-width: 600px;  
     display: flex;
     justify-content: center;
     align-items: center;
     width: 100%;
     margin-top: 24px;
-}
+} */
 
-.table-container {
+/* .table-container {
     width: 60%;
     margin-top: 24px;
     display: center; 
@@ -33,5 +33,5 @@ const defaultPattern = '';
         width: 100%;
          height: 100%
     }
-}
+} */
 </style>

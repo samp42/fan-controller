@@ -30,21 +30,11 @@ body {
   text-align: center;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: 0.75s;
-}
 
-.logo.tauri:hover {
-  filter: drop-shadow(0 0 2em #24c8db);
-}
-
-.row {
+/* .row {
   display: flex;
   justify-content: center;
-}
+} */
 
 a {
   font-weight: 500;
@@ -64,6 +54,7 @@ input,
 button {
   border-radius: 8px;
   border: 1px solid transparent;
+  outline: none;
   padding: 0.6em 1.2em;
   font-size: 1em;
   font-weight: 500;
@@ -84,11 +75,6 @@ button:hover {
 button:active {
   border-color: black;
   background-color: #65656598;
-}
-
-input,
-button {
-  outline: none;
 }
 
 #greet-input {
