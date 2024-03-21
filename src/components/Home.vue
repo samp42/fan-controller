@@ -1,12 +1,10 @@
 <script setup lang="ts">
-import { RouterLink } from "vue-router";
 import Table from "./Table.vue";
 
 const defaultPattern = ''; 
 </script>
 
 <template>
-    <RouterLink to="/help" class="help-link">Help</RouterLink>
     <div style="overflow-x:auto;">
         <!--<input type="text" placeholder="Pattern Name" />-->
         <div class="center">
