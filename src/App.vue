@@ -7,17 +7,7 @@ import { RouterView } from "vue-router";
   <div class="header">
     <Header />
   </div>
-  <!-- <h2 class="header">PatternName</h2>
-<div style="overflow-x:auto;">
-  <form>
-    <div class="center">
-    <Table></Table>
-    <div class="">
-      <button @click="clear()">Clear</button>
-    </div>
-    </div>
-  </form>
-</div> -->
+
   <div class="app-content">
     <RouterView></RouterView>
   </div>
@@ -37,5 +27,13 @@ import { RouterView } from "vue-router";
   margin-top: 54px;
   overflow: scroll;
   margin-bottom: 50px;
+}
+
+.center {
+  min-width:600px;
+  margin: auto;
+  width: 40%;
+  text-align: center;
+  box-sizing: border-box;
 }
 </style>

@@ -1,16 +1,16 @@
 <script setup lang="ts">
 import Table from "./Table.vue";
 
-const defaultPattern = ''; 
+const defaultPattern = "";
 </script>
 
 <template>
-    <div style="overflow-x:auto;">
-        <!--<input type="text" placeholder="Pattern Name" />-->
-        <div class="center">
-            <Table class="table" :patternName="defaultPattern"></Table>
-        </div>
+  <div style="overflow-x: auto">
+    <!--<input type="text" placeholder="Pattern Name" />-->
+    <div class="center">
+      <Table class="table" :patternName="defaultPattern"></Table>
     </div>
+  </div>
 </template>
 
 <style>
@@ -18,7 +18,7 @@ const defaultPattern = '';
     min-width: 600px;  
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: center;home-layout
     width: 100%;
     margin-top: 24px;
 } */
