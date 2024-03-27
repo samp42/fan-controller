@@ -4,10 +4,10 @@ import BackButton from "./BackButton.vue";
 
 </script>
 <template>
-    <div>
-      <BackButton></BackButton>  
-    </div>   
-    <h1>Patterns</h1>
+    <div class="page-title">
+      <BackButton class="back-button"></BackButton>
+      <h1>Patterns</h1>
+    </div>
     <div class="layout">
     <div class="update">
         <div class = "page">
@@ -108,9 +108,13 @@ import BackButton from "./BackButton.vue";
     </div>
   </div>
   
-    </template>
+</template>
     
-    <style>
+<style scoped>
+.back-button {
+  /* TODO */
+}
+
   *{ box-sizing: border-box; }
 
   .page{

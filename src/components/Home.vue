@@ -1,9 +1,3 @@
-<script setup lang="ts">
-import Table from "./Table.vue";
-
-const defaultPattern = "";
-</script>
-
 <template>
   <div style="overflow-x: auto">
     <!--<input type="text" placeholder="Pattern Name" />-->
@@ -13,25 +7,22 @@ const defaultPattern = "";
   </div>
 </template>
 
-<style>
-/* .home-layout {
-    min-width: 600px;  
-    display: flex;
-    justify-content: center;
-    align-items: center;home-layout
-    width: 100%;
-    margin-top: 24px;
-} */
+<script setup lang="ts">
+import Table from "./Table.vue";
+import { onMounted, on } from "vue";
+// import mitt from "mitt";
 
-/* .table-container {
-    width: 60%;
-    margin-top: 24px;
-    display: center; 
-    justify-content: center;
-    align-items: center;
-    .table {
-        width: 100%;
-         height: 100%
-    }
-} */
-</style>
+// const emitter = mitt();
+const defaultPattern = "";
+
+// onMounted(() => {
+//   // on("run_pattern", () => {
+//   //   // Handle the emitted event
+//   //   console.log("run Pattern");
+//   // });
+//   this.emitter.on("run", () => {
+//     console.log("RUN FROM MITT");
+//   })
+// });
+</script>
+

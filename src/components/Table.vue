@@ -98,15 +98,14 @@
 
 </template>
 
-    <script lang="ts">  
-    import {RouteLocationNormalizedLoaded, Router} from 'vue-router'; 
+<script lang="ts">  
+    import {RouteLocationNormalizedLoaded} from 'vue-router'; 
     export default {
         data() {
             return {
                 //grid: Array<Number>(81).fill(0)
                     patternName: '',
                     grid: Array(81).fill(0).map(() => ({ value: 0, disabled: false })),
-                    
                 };
         },
         mounted() {

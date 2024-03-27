@@ -1,22 +1,22 @@
 <template>
   <div class="header-container">
-    <div class="header-elements">
+    <div > <!--class="header-elements"-->
       <div class="dropdown">
         <button class="header-button dropButton">File</button>
         <div class="dropContent">
           <button class="dropdown-button" @click="openFileInput">Load File</button>
           <input type="file" ref="fileInput" style="display: none" />
-          <button class="dropdown-button">Save Pattern</button>
+          <!-- <button class="dropdown-button">Save Pattern</button> -->
         </div>
         <RouterLink to="/patterns" class="header-button">Patterns</RouterLink>
         <RouterLink to="/help" class="header-button">Help</RouterLink>
       </div>
     </div>
     <div class="navbar-select-container">
-      <button class="play-button action-button" @click="">
+      <button class="play-button action-button" @click="$emit('run')">
         <img src="../assets/play.svg" alt="play" class="img-icon"/>
       </button>
-      <button class="stop-button action-button" @click="">
+      <button class="stop-button action-button" @click="$emit('stop')">
         <img src="../assets/stop.svg" alt="stop" class="img-icon"/>
       </button>
       <button class="refresh-button action-button" @click="list">
@@ -33,7 +33,7 @@ import { invoke } from "@tauri-apps/api";
 import Select from "./Select.vue";
 
 const ports = ref([]);
-const fileInputRef = ref<HTMLInputElement | null>(null);
+// const fileInputRef = ref<HTMLInputElement | null>(null);
 
 function list(): void {
   invoke('list_serial_ports').then((p: any) => {
@@ -42,8 +42,19 @@ function list(): void {
 }
 
 function openFileInput(): void {
-  fileInputRef.value?.click();
+  // fileInputRef.value?.click();
+  openFile();
 }
+
+// async function openFile(): Promise<void> {
+//     const selected = await open({
+//         multiple: false,
+//         filters: [{
+//           name: 'CSV',
+//           extensions: ['csv']
+//         }]
+//       });
+// }
 
 onBeforeMount(list);
 </script>
@@ -92,7 +103,7 @@ onBeforeMount(list);
   padding: 0;
   padding-top: 6px;
   padding-left: 1px;
-  background-color: #888;
+  background-color: #1a1a1a;
 }
 
 .img-icon {
@@ -137,6 +148,7 @@ li {
   min-width: 160px;
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
   z-index: 1;
+  top: 54px;
 }
 
 .dropContent a {
@@ -148,7 +160,7 @@ li {
 }
 
 .dropContent a:hover {
-  background-color: #f1f1f1;
+  background-color: #eee;
 }
 
 .dropdown:hover .dropContent {
