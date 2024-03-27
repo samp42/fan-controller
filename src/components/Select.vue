@@ -34,7 +34,7 @@
 
 <script setup lang="ts">
 // import { onBeforeMount } from 'vue';
-const props = defineProps({selectOptions: Array<String>});
+// const props = defineProps({selectOptions: Array<String>});
 
 // onMounted(() => {
 //   console.log(props);

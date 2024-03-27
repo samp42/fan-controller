@@ -9,7 +9,7 @@
 
 <script setup lang="ts">
 import Table from "./Table.vue";
-import { onMounted, on } from "vue";
+// import { onMounted, on } from "vue";
 // import mitt from "mitt";
 
 // const emitter = mitt();

@@ -1,8 +1,3 @@
-<script lang="ts"> 
-import { RouterLink } from "vue-router";
-import BackButton from "./BackButton.vue";
-
-</script>
 <template>
     <div class="page-title">
       <BackButton class="back-button"></BackButton>
@@ -109,6 +104,12 @@ import BackButton from "./BackButton.vue";
   </div>
   
 </template>
+
+<script setup lang="ts"> 
+import { RouterLink } from "vue-router";
+import BackButton from "./BackButton.vue";
+
+</script>
     
 <style scoped>
 .back-button {

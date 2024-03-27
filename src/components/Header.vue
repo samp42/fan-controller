@@ -43,7 +43,7 @@ function list(): void {
 
 function openFileInput(): void {
   // fileInputRef.value?.click();
-  openFile();
+  // openFile();
 }
 
 // async function openFile(): Promise<void> {
