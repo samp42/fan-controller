@@ -1,12 +1,5 @@
-<script lang="ts">
-import { RouterLink } from "vue-router";
-import BackButton from "./BackButton.vue";
-</script>
 <template>
   <div>
-    <!-- <RouterLink :to="{ path: '/', query: { pattern: '' } }" class="back-link">
-      <p>Back</p>
-    </RouterLink> -->
     <BackButton />
   </div>
   <h1>Patterns</h1>
@@ -14,7 +7,7 @@ import BackButton from "./BackButton.vue";
     <div class="update">
       <div class="page">
         <RouterLink :to="{ path: '/', query: { pattern: 'Alternate rows' } }">
-          <img src="src/images/alt row.png" alt="alternate rows" />
+          <img :src="alt_row" alt="alternate rows" />
         </RouterLink>
         <div class="name" id="alt_r">Alternate rows</div>
       </div>
@@ -22,7 +15,7 @@ import BackButton from "./BackButton.vue";
     <div class="update">
       <div class="page">
         <RouterLink :to="{ path: '/', query: { pattern: 'Alternate columns' } }">
-          <img src="src/images/alt col.png" alt="alternate columns" />
+          <img :src="alt_col" alt="alternate columns" />
         </RouterLink>
         <div class="name" id="alt_c">Alternate columns</div>
       </div>
@@ -30,7 +23,7 @@ import BackButton from "./BackButton.vue";
     <div class="update">
       <div class="page">
         <RouterLink :to="{ path: '/', query: { pattern: 'Gradient' } }">
-          <img src="src/images/gradient.png" alt="gradient" />
+          <img :src="gradient" alt="gradient" />
         </RouterLink>
         <div class="name" id="grad">Gradient</div>
       </div>
@@ -38,7 +31,7 @@ import BackButton from "./BackButton.vue";
     <div class="update">
       <div class="page">
         <RouterLink :to="{ path: '/', query: { pattern: 'Row on' } }">
-          <img src="src/images/row on.png" alt="row on" />
+          <img :src="row_on" alt="row on" />
         </RouterLink>
         <div class="name" id="row_on">Row on</div>
       </div>
@@ -46,7 +39,7 @@ import BackButton from "./BackButton.vue";
     <div class="update">
       <div class="page">
         <RouterLink :to="{ path: '/', query: { pattern: 'Row off' } }">
-          <img src="src/images/row off.png" alt="row off" />
+          <img :src="row_off" alt="row off" />
         </RouterLink>
         <div class="name" id="row_off">Row off</div>
       </div>
@@ -54,7 +47,7 @@ import BackButton from "./BackButton.vue";
     <div class="update">
       <div class="page">
         <RouterLink :to="{ path: '/', query: { pattern: 'Column on' } }">
-          <img src="src/images/col on.png" alt="column off" />
+          <img :src="col_on" alt="column off" />
         </RouterLink>
         <div class="name" id="col_on">Column on</div>
       </div>
@@ -62,7 +55,7 @@ import BackButton from "./BackButton.vue";
     <div class="update">
       <div class="page">
         <RouterLink :to="{ path: '/', query: { pattern: 'Column off' } }">
-          <img src="src/images/col off.png" alt="column off" />
+          <img :src="col_off" alt="column off" />
         </RouterLink>
         <div class="name" id="col_off">Column off</div>
       </div>
@@ -71,7 +64,7 @@ import BackButton from "./BackButton.vue";
     <div class="update">
       <div class="page">
         <RouterLink :to="{ path: '/', query: { pattern: 'Middle on' } }">
-          <img src="src/images/middle on .png" alt="middle on" />
+          <img :src="middle_on" alt="middle on" />
         </RouterLink>
         <div class="name" id="mid_on">Middle on</div>
       </div>
@@ -79,7 +72,7 @@ import BackButton from "./BackButton.vue";
     <div class="update">
       <div class="page">
         <RouterLink :to="{ path: '/', query: { pattern: 'Middle off' } }">
-          <img src="src/images/middle off.png" alt="middle off" />
+          <img :src="middle_off" alt="middle off" />
         </RouterLink>
         <div class="name" id="mid_off">Middle off</div>
       </div>
@@ -87,7 +80,7 @@ import BackButton from "./BackButton.vue";
     <div class="update">
       <div class="page">
         <RouterLink :to="{ path: '/', query: { pattern: 'Checkerboard' } }">
-          <img src="src/images/checkerboard.png" alt="checkerboard" />
+          <img :src="checkerboard" alt="checkerboard" />
         </RouterLink>
         <div class="name" id="checker">Checkerboard</div>
       </div>
@@ -95,7 +88,7 @@ import BackButton from "./BackButton.vue";
     <div class="update">
       <div class="page">
         <RouterLink :to="{ path: '/', query: { pattern: 'Random' } }">
-          <img src="src/images/random.png" alt="random" />
+          <img :src="random" alt="random" />
         </RouterLink>
         <div class="name" id="random">Random</div>
       </div>
@@ -103,7 +96,7 @@ import BackButton from "./BackButton.vue";
     <div class="update">
       <div class="page">
         <RouterLink :to="{ path: '/', query: { pattern: 'Grid' } }">
-          <img src="src/images/grid.png" alt="grid" />
+          <img :src="grid" alt="grid" />
         </RouterLink>
         <div class="name" id="grid">Grid</div>
       </div>
@@ -113,7 +106,7 @@ import BackButton from "./BackButton.vue";
   <div class="update">
     <div class="page">
       <RouterLink :to="{ path: '/', query: { pattern: 'Gaussian' } }">
-        <img src="src/images/gaussian.png" alt="gaussian" />
+        <img :src="gaussian" alt="gaussian" />
       </RouterLink>
       <div class="name" id="grid">Gaussian</div>
     </div>
@@ -176,3 +169,21 @@ import BackButton from "./BackButton.vue";
   color: black;
 }
 </style>
+
+<script setup lang="ts">
+import { RouterLink } from "vue-router";
+import BackButton from "./BackButton.vue";
+import alt_row from "../assets/images/alt_row.png";
+import alt_col from "../assets/images/alt_col.png";
+import col_on from "../assets/images/col_on.png";
+import col_off from "../assets/images/col_off.png";
+import checkerboard from "../assets/images/checkerboard.png";
+import row_on from "../assets/images/row_on.png";
+import row_off from "../assets/images/row_off.png";
+import gradient from "../assets/images/gradient.png";
+import random from "../assets/images/random.png";
+import grid from "../assets/images/grid.png";
+import middle_on from "../assets/images/middle_on.png";
+import middle_off from "../assets/images/middle_off.png";
+import gaussian from "../assets/images/gaussian.png";
+</script>

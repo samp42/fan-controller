@@ -1,6 +1,5 @@
 <template>
   <div style="overflow-x: auto">
-    <!--<input type="text" placeholder="Pattern Name" />-->
     <div class="center">
       <Table class="table"></Table>
     </div>
