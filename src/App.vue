@@ -1,9 +1,9 @@
 <template>
-  <div class="header">
+  <div class="header" >
     <Header @run="runPattern" @stop="stopPattern" />
   </div>
 
-  <div class="app-content">
+  <div class="app-content" style="overflow: hidden">
     <RouterView ref="homePage"></RouterView>
   </div>
 </template>
@@ -57,7 +57,7 @@ function stopPattern(): void {
 .center {
   min-width: 600px;
   margin: auto;
-  width: 40%;
+  width: 45%;
   text-align: center;
   box-sizing: border-box;
 }
