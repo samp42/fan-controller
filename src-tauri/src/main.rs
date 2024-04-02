@@ -1,27 +1,52 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
-use std::{sync::Arc, sync::Mutex};
+use std::{
+    sync::{Arc, Mutex},
+    time::Duration,
+};
 
+use serde::{Deserialize, Serialize};
 use tauri::Manager;
 
+#[derive(Deserialize)]
 struct InstantProfile {
     pub fans: Vec<u8>,
     pub delta_t: u8, // ms
 }
 
-#[derive(Clone)]
 struct PatternArc {
     pub run: Arc<Mutex<bool>>,
-    pub profile: Arc<Mutex<InstantProfile>>,
 }
 
-struct Pattern {
-    pub run: bool,
-    pub profile: Vec<InstantProfile>,
+fn set_fans_to_speed(port: String, speed: u8) {
+    let start_marker: [u8; 2] = [0x00, 0xFF];
+    let end_marker: [u8; 2] = [0xFF, 0x00];
+    let mut data_packet: Vec<u8> = Vec::new();
+
+    data_packet.extend_from_slice(&start_marker);
+
+    for _ in 0..81 {
+        let pwm_value = (speed as f32 / 100.0 * 4095.0) as u16;
+        let high_byte = (pwm_value >> 8) as u8;
+        let low_byte = (pwm_value & 0xFF) as u8;
+
+        data_packet.push(high_byte);
+        data_packet.push(low_byte);
+    }
+
+    data_packet.extend_from_slice(&end_marker);
+
+    let mut port = serialport::new(port, 115200)
+        .timeout(std::time::Duration::from_millis(1))
+        .open()
+        .expect("Failed to open port");
+
+    port.write_all(&data_packet)
+        .expect("Failed to write to port");
 }
 
-fn set_fans_to_zero(port: String) {
+fn set_grid_to_speed(port: &str, profile: &Vec<u8>) {
     let start_marker: [u8; 2] = [0x00, 0xFF];
     let end_marker: [u8; 2] = [0xFF, 0x00];
     let mut data_packet: Vec<u8> = Vec::new();
@@ -29,8 +54,12 @@ fn set_fans_to_zero(port: String) {
     data_packet.extend_from_slice(&start_marker);
 
     for i in 0..81 {
-        data_packet.push(0 as u8);
-        data_packet.push(0 as u8);
+        let pwm_value = (*profile.get(i).unwrap() as f32 / 100.0 * 4095.0) as u16;
+        let high_byte = (pwm_value >> 8) as u8;
+        let low_byte = (pwm_value & 0xFF) as u8;
+
+        data_packet.push(high_byte);
+        data_packet.push(low_byte);
     }
 
     data_packet.extend_from_slice(&end_marker);
@@ -56,7 +85,12 @@ fn list_serial_ports() -> Vec<String> {
 }
 
 #[tauri::command]
-fn run_pattern(app: tauri::AppHandle, port: String, grid_value: Vec<u8>) {
+fn run_pattern(
+    app: tauri::AppHandle,
+    port: String,
+    grid_value: Option<Vec<u8>>,
+    profile: Option<InstantProfile>,
+) {
     let cloned_app = app.clone();
 
     std::thread::spawn(move || {
@@ -69,12 +103,27 @@ fn run_pattern(app: tauri::AppHandle, port: String, grid_value: Vec<u8>) {
 
         drop(run);
 
+        let cloned_port = port.clone();
+        let duration = Duration::from_secs(1);
+
         loop {
             let state = cloned_app.state::<PatternArc>();
-            let running = state.run.lock().unwrap();
+            let mut running = state.run.lock().unwrap();
 
             if *running {
                 // TODO: run logic
+
+                match grid_value {
+                    Some(ref grid) => {
+                        set_grid_to_speed(&cloned_port, &grid);
+                    },
+                    None => match profile {
+                        Some(ref profile) => {}
+                        None => {
+                            *running = false;
+                        }
+                    },
+                }
 
                 drop(running);
             } else {
@@ -82,7 +131,7 @@ fn run_pattern(app: tauri::AppHandle, port: String, grid_value: Vec<u8>) {
                 break;
             }
 
-            std::thread::sleep(std::time::Duration::from_millis(100));
+            std::thread::sleep(duration);
         }
     });
 }
@@ -95,7 +144,7 @@ fn stop_pattern(state: tauri::State<PatternArc>, port: String) {
         // set run to false
         *run = false;
 
-        set_fans_to_zero(port);
+        set_fans_to_speed(port, 0);
     }
 
     drop(run);
@@ -104,10 +153,10 @@ fn stop_pattern(state: tauri::State<PatternArc>, port: String) {
 fn main() {
     let pattern = PatternArc {
         run: Arc::new(Mutex::new(false)),
-        profile: Arc::new(Mutex::new(InstantProfile {
-            fans: vec![0; 81],
-            delta_t: 0,
-        })),
+        // profile: Arc::new(Mutex::new(InstantProfile {
+        //     fans: vec![0; 81],
+        //     delta_t: 0,
+        // })),
     };
 
     let result = tauri::Builder::default()

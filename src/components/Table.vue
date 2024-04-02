@@ -33,9 +33,6 @@
     </div>
   </div>
   <br />
-  <!--    <div v-if="patternName.toLowerCase()  === ''">
-        </div>
-    -->
   <div v-if="patternName === 'checkerboard' || patternName === 'Checkerboard'">
     <label for="size">Size:</label>
     <input class="patternInput" type="text" id="size" />
@@ -247,15 +244,18 @@ export default {
           var size = (<HTMLInputElement>document.getElementById("size")).value;
           this.checkerBoard(parseInt(size), parseInt(speed), check);
           break;
-        case "jet":
-          var check = (<HTMLInputElement>document.getElementById("check")).checked;
-          var speed = (<HTMLInputElement>document.getElementById("speed")).value;
-          var size = (<HTMLInputElement>document.getElementById("size")).value;
-          this.jetflow(55);
-          break;
+        // TODO: Implement jetflow
+        // case "jet":
+        //   var check = (<HTMLInputElement>document.getElementById("check")).checked;
+        //   var speed = (<HTMLInputElement>document.getElementById("speed")).value;
+        //   var size = (<HTMLInputElement>document.getElementById("size")).value;
+        //   this.jetflow(55);
+        //   break;
         case "gaussian":
-          var mean = (<HTMLInputElement>document.getElementById("mean")).value;
-          var sigma = (<HTMLInputElement>document.getElementById("sigma")).value;
+          var mean = parseInt((<HTMLInputElement>document.getElementById("mean")).value);
+          var sigma = parseInt(
+            (<HTMLInputElement>document.getElementById("sigma")).value
+          );
           this.gaussian(mean, sigma);
           break;
         default:
@@ -329,14 +329,12 @@ export default {
         disabled: cell.disabled,
       }));
     },
-
     singleCol(col: number, val: number, on: boolean) {
       this.grid = this.grid.map((cell, index) => ({
         value: on ? (index % 9 === col - 1 ? val : 0) : index % 9 === col - 1 ? 0 : val,
         disabled: cell.disabled,
       }));
     },
-
     altRows(lines: number, val: number, on: boolean) {
       this.grid = this.grid.map((cell, index) => ({
         value: Math.floor(index / 9 / lines) % 2 === (on ? 0 : 1) ? val : 0,
@@ -400,7 +398,7 @@ export default {
     },
     gaussian(mean: number, sigma: number) {
       // Define the Gaussian function
-      const gaussian = function (row, col) {
+      const gaussian = function (row: number, col: number) {
         return Math.exp(-((row - mean) ** 2 + (col - mean) ** 2) / (2 * sigma ** 2));
       };
 
@@ -430,7 +428,8 @@ export default {
 
       // Ensure the input value is between 0 and 100
       if (isNaN(inputValue) || inputValue < 0 || inputValue > 100) {
-        const numOnly = inputValue.toString().replace(/[^0-9]/g, "");
+        const numOnly = parseInt(inputValue.toString().replace(/[^0-9]/g, ""));
+
         this.grid[index] = { ...this.grid[index], value: numOnly, disabled: false };
       }
     },
