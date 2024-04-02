@@ -21,13 +21,17 @@ function runPattern(): void {
   const grid = useGridStore();
   console.log(grid);
 
-  invoke("run_pattern").then((p: any) => {
+  invoke("run_pattern", { port: grid.port }).then((p: any) => {
     console.log(p);
   });
 }
 
 function stopPattern(): void {
+  const grid = useGridStore();
   console.log("stop");
+  invoke("stop_pattern", { port: grid.port }).then((p: any) => {
+    console.log(p);
+  });
 }
 </script>
 

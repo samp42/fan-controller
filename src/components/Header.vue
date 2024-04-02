@@ -2,13 +2,14 @@
   <div class="header-container">
     <div>
       <!--class="header-elements"-->
-      <div class="dropdown">
-        <button class="header-button dropButton">File</button>
+      <div class="button-container">
+        <!-- <button class="header-button dropButton">File</button>
         <div class="dropContent">
           <button class="dropdown-button" @click="openFileInput">Load File</button>
-          <input type="file" ref="fileInput" style="display: none" />
-          <!-- <button class="dropdown-button">Save Pattern</button> -->
-        </div>
+          <input type="file" ref="fileInput" style="display: none" /> -->
+        <!-- <button class="dropdown-button">Save Pattern</button> -->
+        <!-- </div> -->
+        <RouterLink to="/" class="header-button">Home</RouterLink>
         <RouterLink to="/patterns" class="header-button">Patterns</RouterLink>
         <RouterLink to="/help" class="header-button">Help</RouterLink>
       </div>
@@ -48,10 +49,10 @@ function list(): void {
   });
 }
 
-function openFileInput(): void {
-  // fileInputRef.value?.click();
-  // openFile();
-}
+// function openFileInput(): void {
+//   // fileInputRef.value?.click();
+//   // openFile();
+// }
 
 onMounted(() => {
   window.setInterval(list, 3000);
@@ -75,6 +76,10 @@ onMounted(() => {
   flex-direction: row;
 }
 
+.button-container {
+  margin-left: 12px;
+}
+
 .header-button {
   background: none;
   border: none;
@@ -82,6 +87,7 @@ onMounted(() => {
   border-radius: 0;
   color: white;
   height: 100%;
+  margin-right: 12px;
 }
 
 .refresh-button {

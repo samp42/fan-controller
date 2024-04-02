@@ -1,6 +1,6 @@
 <template>
   <div class="select-container">
-    <select class="navbar-button">
+    <select class="navbar-button" v-model="selectedPort">
       <option v-for="(option, index) in selectOptions" :key="index">{{ option }}</option>
     </select>
   </div>
@@ -33,16 +33,14 @@
 </style>
 
 <script setup lang="ts">
-// import { onBeforeMount } from 'vue';
-defineProps({selectOptions: Array<String>});
+import { ref, watch } from 'vue';
+import { useGridStore } from "../store";
+defineProps({ selectOptions: Array<String> });
 
-// onMounted(() => {
-//   console.log(props);
-//   console.log(props.selectOptions);
-// });
+const selectedPort = ref<string | null>(null);
 
-// beforeCreate = () => {
-//   console.log(props);
-//   console.log(props.selectOptions);
-// }
+watch(selectedPort, () => {
+  const grid = useGridStore();
+  grid.port = selectedPort.value!;
+});
 </script>

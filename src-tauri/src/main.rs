@@ -12,15 +12,38 @@ struct InstantProfile {
 
 #[derive(Clone)]
 struct PatternArc {
-    pub port: Arc<Mutex<String>>,
     pub run: Arc<Mutex<bool>>,
     pub profile: Arc<Mutex<Vec<InstantProfile>>>,
 }
 
 struct Pattern {
-    pub port: String,
     pub run: bool,
     pub profile: Vec<InstantProfile>,
+}
+
+fn set_fans_to_zero(port: String) {
+    let start_marker: [u8; 2] = [0x00, 0xFF];
+    let end_marker: [u8; 2] = [0xFF, 0x00];
+    let mut data_packet: Vec<u8> = Vec::new();
+
+    data_packet.extend_from_slice(&start_marker);
+
+    for i in 0..81 {
+        data_packet.push(0 as u8);
+        data_packet.push(0 as u8);
+    }
+
+    data_packet.extend_from_slice(&end_marker);
+
+    let mut port = serialport::new(port, 115200)
+        .timeout(std::time::Duration::from_millis(1))
+        .open()
+        .expect("Failed to open port");
+
+    port.write_all(&data_packet)
+        .expect("Failed to write to port");
+
+    println!("{:?}", data_packet);
 }
 
 #[tauri::command]
@@ -33,12 +56,12 @@ fn list_serial_ports() -> Vec<String> {
 }
 
 #[tauri::command]
-fn run_pattern(app: tauri::AppHandle) {
-
+fn run_pattern(app: tauri::AppHandle, port: String) {
     let cloned_app = app.clone();
 
-    std::thread::spawn(move || {
+    println!("Running pattern on port: {:?}", port);
 
+    std::thread::spawn(move || {
         let state = cloned_app.state::<PatternArc>();
 
         let mut run = state.run.lock().unwrap();
@@ -51,75 +74,45 @@ fn run_pattern(app: tauri::AppHandle) {
         loop {
             let state = cloned_app.state::<PatternArc>();
             let running = state.run.lock().unwrap();
-            println!("Running: {:?}", *running);
 
-            if !*running {
+            if *running {
+                println!("Running: {:?}", *running);
+                drop(running);
+            } else {
                 drop(running);
                 break;
             }
 
-            drop(running);
-
+            std::thread::sleep(std::time::Duration::from_millis(100));
         }
-
     });
 }
 
 #[tauri::command]
-fn stop_pattern(state: tauri::State<PatternArc>) {
+fn stop_pattern(state: tauri::State<PatternArc>, port: String) {
     let mut run = state.run.lock().unwrap();
 
-    // set run to false
-    *run = false;
+    println!("Stopping pattern on port: {:?}", port);
 
-    println!("Pattern running: {:?}", run);
+    if *run {
+        // set run to false
+        *run = false;
+
+        println!("Pattern running: {:?}", run);
+
+        set_fans_to_zero(port);
+    }
 
     drop(run);
 }
 
 fn main() {
-    // tauri::Builder::default()
-    //     .manage(Pattern {
-    //       run: Mutex::new(false),
-    //       profile: Mutex::new(Vec::new()),
-    //     })
-    //     .invoke_handler(tauri::generate_handler![list_serial_ports, run_pattern])
-    //     // .menu(menu)
-    //     // .on_menu_event(|event| {
-    //     //     match event.menu_item_id() {
-    //     //       "quit" => {
-    //     //         std::process::exit(0);
-    //     //       }
-    //     //       "close" => {
-    //     //         event.window().close().unwrap();
-    //     //       }
-    //     //       _ => {}
-    //     //     }
-    //     // })
-    //     .setup(|app| {
-    //         let state: tauri::State<'_, Pattern>  = app.state();
-    //         print!("Setup");
-    //         run_loop(state);
-    //         Ok(())
-    //     })
-    //     .run(tauri::generate_context!())
-    //     .expect("error while running tauri application");
-
     let pattern = PatternArc {
-        port: Arc::new(Mutex::new(String::from("/dev/cu.usbmodem149464201"))),
         run: Arc::new(Mutex::new(false)),
         profile: Arc::new(Mutex::new(Vec::new())),
     };
 
     let result = tauri::Builder::default()
-        // .setup(|app| {
-        //     let pattern = PatternArc {
-        //         port: Arc::new(Mutex::new(String::from("/dev/cu.usbmodem149464201"))),
-        //         run: Arc::new(Mutex::new(false)),
-        //         profile: Arc::new(Mutex::new(Vec::new())),
-        //     };
-        //     app.manage(pattern);
-        // })
         .manage(pattern)
         .invoke_handler(tauri::generate_handler![
             list_serial_ports,
@@ -129,7 +122,6 @@ fn main() {
         .build(tauri::generate_context!());
 
     match result {
-        // Ok(app) => app.run(|_app_handle, event| {}),
         Ok(app) => {
             // Get a handle to the Tauri manager
             // let manager: tauri::State<'_, Pattern> = app.state();
@@ -263,25 +255,6 @@ fn main() {
             //             // }
             //         });
 
-            // tauri::async_runtime::spawn(async move {
-            //     loop {
-            //         let state = app.app_handle().state::<PatternArc>();
-            //         let running = state.run.lock().unwrap();
-            //         println!("Running: {:?}", *running);
-            //     }
-            // });
-
-            // std::thread::spawn(move || {
-            //     // let state = app.app_handle().state::<PatternArc>();
-            //     // let running = state.run.lock().unwrap();
-            //     // println!("Running: {:?}", *running);
-
-            //     let state = app.handle();
-
-            //     println!("Thread running");
-            // });
-
-            // Start the Tauri application
             app.run(|_app_handle, _event| {});
         }
         Err(_) => println!("error while running tauri application"),
