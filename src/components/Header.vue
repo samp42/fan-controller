@@ -1,6 +1,7 @@
 <template>
   <div class="header-container">
-    <div > <!--class="header-elements"-->
+    <div>
+      <!--class="header-elements"-->
       <div class="dropdown">
         <button class="header-button dropButton">File</button>
         <div class="dropContent">
@@ -14,21 +15,27 @@
     </div>
     <div class="navbar-select-container">
       <button class="play-button action-button" @click="$emit('run')">
-        <img src="../assets/play.svg" alt="play" class="img-icon"/>
+        <img src="../assets/play.svg" alt="play" class="img-icon" />
       </button>
       <button class="stop-button action-button" @click="$emit('stop')">
-        <img src="../assets/stop.svg" alt="stop" class="img-icon"/>
+        <img src="../assets/stop.svg" alt="stop" class="img-icon" />
       </button>
-      <button class="refresh-button action-button" @click="list">
+      <!-- <button class="refresh-button action-button" @click="list">
         <img src="../assets/arrow-clockwise.svg" alt="refresh" class="img-icon"/>
-      </button>
+      </button> -->
       <Select :select-options="ports"></Select>
+      <!-- <img
+        src="../assets/loader.svg"
+        alt="refresh"
+        class="refresh-button"
+        style="height: 50px"
+      /> -->
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onBeforeMount } from "vue";
+import { ref, onMounted } from "vue";
 import { invoke } from "@tauri-apps/api";
 import Select from "./Select.vue";
 
@@ -36,7 +43,7 @@ const ports = ref([]);
 // const fileInputRef = ref<HTMLInputElement | null>(null);
 
 function list(): void {
-  invoke('list_serial_ports').then((p: any) => {
+  invoke("list_serial_ports").then((p: any) => {
     ports.value = p;
   });
 }
@@ -46,17 +53,9 @@ function openFileInput(): void {
   // openFile();
 }
 
-// async function openFile(): Promise<void> {
-//     const selected = await open({
-//         multiple: false,
-//         filters: [{
-//           name: 'CSV',
-//           extensions: ['csv']
-//         }]
-//       });
-// }
-
-onBeforeMount(list);
+onMounted(() => {
+  window.setInterval(list, 3000);
+});
 </script>
 
 <style>

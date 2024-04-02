@@ -1,6 +1,6 @@
 <template>
   <div class="header">
-    <Header @run="runPattern" @stop="stopPattern"/>
+    <Header @run="runPattern" @stop="stopPattern" />
   </div>
 
   <div class="app-content">
@@ -17,16 +17,13 @@ import { invoke } from "@tauri-apps/api";
 const homePage = ref();
 
 function runPattern(): void {
-  // console.log('run')
-  // homePage.value.$emit("run_pattern");
-
-  invoke('run_pattern').then((p: any) => {
+  invoke("run_pattern").then((p: any) => {
     console.log(p);
   });
 }
 
 function stopPattern(): void {
-  console.log('stop')
+  console.log("stop");
 }
 </script>
 
@@ -47,7 +44,7 @@ function stopPattern(): void {
 }
 
 .center {
-  min-width:600px;
+  min-width: 600px;
   margin: auto;
   width: 40%;
   text-align: center;
