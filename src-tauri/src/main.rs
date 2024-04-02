@@ -33,63 +33,37 @@ fn list_serial_ports() -> Vec<String> {
 }
 
 #[tauri::command]
-fn run_pattern(state: tauri::State<PatternArc>) {
-    let mut run = state.run.lock().unwrap();
+fn run_pattern(app: tauri::AppHandle) {
 
-    // set run to true
-    *run = true;
+    let cloned_app = app.clone();
 
-    loop {
-        {
+    std::thread::spawn(move || {
+
+        let state = cloned_app.state::<PatternArc>();
+
+        let mut run = state.run.lock().unwrap();
+
+        // set run to true
+        *run = true;
+
+        drop(run);
+
+        loop {
+            let state = cloned_app.state::<PatternArc>();
             let running = state.run.lock().unwrap();
+            println!("Running: {:?}", *running);
+
             if !*running {
-                // Break out of the loop if running is set to false
+                drop(running);
                 break;
             }
 
             drop(running);
+
         }
 
-        println!("Pattern loop running");
-
-        // Access shared state inside the loop as needed
-        // let mut pattern = state.pattern.lock().unwrap();
-        // Your loop logic here
-
-        // Sleep or perform some other action
-        std::thread::sleep(std::time::Duration::from_millis(100));
-    }
-
-    println!("Pattern loop exited");
-
-    drop(run);
+    });
 }
-
-// #[tauri::command]
-// fn run_loop(state: tauri::State<PatternArc>) {
-//     loop {
-//         {
-//             let running = state.run.lock().unwrap();
-//             if !*running {
-//                 // Break out of the loop if running is set to false
-//                 break;
-//             }
-
-//             drop(running);
-//         }
-
-//         println!("Pattern loop running");
-
-//         // Access shared state inside the loop as needed
-//         // let mut pattern = state.pattern.lock().unwrap();
-//         // Your loop logic here
-
-//         // Sleep or perform some other action
-//         std::thread::sleep(std::time::Duration::from_millis(100));
-//     }
-
-//     println!("Pattern loop exited");
-// }
 
 #[tauri::command]
 fn stop_pattern(state: tauri::State<PatternArc>) {
@@ -104,21 +78,6 @@ fn stop_pattern(state: tauri::State<PatternArc>) {
 }
 
 fn main() {
-    // let openFile = CustomMenuItem::new("open_file".to_string(), "Open File");
-    // let saveFile: CustomMenuItem::new
-    // let close = CustomMenuItem::new("close".to_string(), "Close Window");
-    // let fileSubmenu = Submenu::new("File", Menu::new().add_item(openFile).add_item(close));
-
-    // let viewSubmenu = Submenu::new("View");
-    // let windowSubmenu = Submenu::new("Window");
-
-    // let menu = Menu::new()
-    //     .add_native_item(MenuItem::Copy)
-    //     .add_item(CustomMenuItem::new("hide", "Hide"))
-    //     .add_submenu(fileSubmenu);
-    //     .add_submenu(viewSubmenu)
-    //     .add_submenu(windowSubmenu);
-
     // tauri::Builder::default()
     //     .manage(Pattern {
     //       run: Mutex::new(false),

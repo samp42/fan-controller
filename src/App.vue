@@ -13,10 +13,14 @@ import Header from "./components/Header.vue";
 import { RouterView } from "vue-router";
 import { ref } from "vue";
 import { invoke } from "@tauri-apps/api";
+import { useGridStore } from "./store";
 
 const homePage = ref();
 
 function runPattern(): void {
+  const grid = useGridStore();
+  console.log(grid);
+
   invoke("run_pattern").then((p: any) => {
     console.log(p);
   });
