@@ -13,7 +13,7 @@ struct InstantProfile {
 #[derive(Clone)]
 struct PatternArc {
     pub run: Arc<Mutex<bool>>,
-    pub profile: Arc<Mutex<Vec<InstantProfile>>>,
+    pub profile: Arc<Mutex<InstantProfile>>,
 }
 
 struct Pattern {
@@ -56,10 +56,8 @@ fn list_serial_ports() -> Vec<String> {
 }
 
 #[tauri::command]
-fn run_pattern(app: tauri::AppHandle, port: String) {
+fn run_pattern(app: tauri::AppHandle, port: String, grid_value: Vec<u8>) {
     let cloned_app = app.clone();
-
-    println!("Running pattern on port: {:?}", port);
 
     std::thread::spawn(move || {
         let state = cloned_app.state::<PatternArc>();
@@ -76,7 +74,8 @@ fn run_pattern(app: tauri::AppHandle, port: String) {
             let running = state.run.lock().unwrap();
 
             if *running {
-                println!("Running: {:?}", *running);
+                // TODO: run logic
+
                 drop(running);
             } else {
                 drop(running);
@@ -92,13 +91,9 @@ fn run_pattern(app: tauri::AppHandle, port: String) {
 fn stop_pattern(state: tauri::State<PatternArc>, port: String) {
     let mut run = state.run.lock().unwrap();
 
-    println!("Stopping pattern on port: {:?}", port);
-
     if *run {
         // set run to false
         *run = false;
-
-        println!("Pattern running: {:?}", run);
 
         set_fans_to_zero(port);
     }
@@ -109,7 +104,10 @@ fn stop_pattern(state: tauri::State<PatternArc>, port: String) {
 fn main() {
     let pattern = PatternArc {
         run: Arc::new(Mutex::new(false)),
-        profile: Arc::new(Mutex::new(Vec::new())),
+        profile: Arc::new(Mutex::new(InstantProfile {
+            fans: vec![0; 81],
+            delta_t: 0,
+        })),
     };
 
     let result = tauri::Builder::default()

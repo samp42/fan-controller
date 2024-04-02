@@ -21,7 +21,10 @@ function runPattern(): void {
   const grid = useGridStore();
   console.log(grid);
 
-  invoke("run_pattern", { port: grid.port }).then((p: any) => {
+  // map grid by taking only the value attribute
+  const gridValue = grid.grid.map((row) => row.value);
+
+  invoke("run_pattern", { port: grid.port, gridValue: gridValue }).then((p: any) => {
     console.log(p);
   });
 }

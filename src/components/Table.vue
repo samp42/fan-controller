@@ -149,6 +149,13 @@ export default {
       grid: [] as { value: number; disabled: boolean }[],
     };
   },
+  watch: {
+    grid(newValue) {
+      const gridStore = useGridStore();
+      gridStore.grid = newValue;
+      console.log(newValue);
+    },
+  },
   mounted() {
     console.log(this.grid);
   },
@@ -440,9 +447,11 @@ export default {
   position: relative;
   width: 100%;
 }
+
 .square {
   padding-bottom: 100%;
 }
+
 .content {
   position: absolute;
   top: 0;
@@ -450,6 +459,7 @@ export default {
   left: 0;
   right: 0;
 }
+
 input {
   background-color: white;
   border-radius: 0;
@@ -461,12 +471,14 @@ input {
   top: 50%;
   left: 50%;
 }
+
 .checkbox {
   vertical-align: middle;
   width: 15px;
   height: 15px;
   padding-right: 100px;
 }
+
 table {
   border: 1px solid black;
   justify-content: center;
@@ -475,17 +487,21 @@ table {
   height: 100%;
   padding: 0;
 }
+
 th {
   display: none;
 }
+
 tr {
   border: 1px solid black;
 }
+
 td {
   border: 1px solid black;
   text-align: center;
   padding: 0;
 }
+
 .pattern {
   color: black;
   background-color: #65656598;
@@ -494,10 +510,12 @@ td {
   box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
   font-weight: bold;
 }
+
 .button {
   justify-content: flex-end;
   text-align: center;
 }
+
 .patternInput {
   background-color: #f2f2f2;
   border: 1px solid #ccc;
@@ -508,30 +526,39 @@ td {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   width: 100px;
 }
+
 .white {
   background-color: rgb(255, 255, 255);
 }
+
 .lightBlue {
   background-color: rgba(28, 98, 249, 0.621);
 }
+
 .blue {
   background-color: rgba(23, 58, 230, 0.687);
 }
+
 .darkBlue {
   background-color: rgba(6, 31, 218, 0.696);
 }
+
 .darkPurple {
   background-color: rgba(68, 1, 226, 0.676);
 }
+
 .purple {
   background-color: rgba(130, 4, 255, 0.687);
 }
+
 .darkPink {
   background-color: rgba(169, 2, 247, 0.644);
 }
+
 .pink {
   background-color: rgba(227, 2, 247, 0.667);
 }
+
 .red {
   background-color: rgba(213, 20, 20, 0.814);
 }
