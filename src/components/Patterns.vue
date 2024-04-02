@@ -1,19 +1,20 @@
 <script lang="ts">
-import { RouterLink, useRouter } from "vue-router";
-
+import { RouterLink } from "vue-router";
+import BackButton from "./BackButton.vue";
 </script>
 <template>
   <div>
-    <RouterLink :to="{ path: '/', query: { pattern: '' } }" class="back-link">
+    <!-- <RouterLink :to="{ path: '/', query: { pattern: '' } }" class="back-link">
       <p>Back</p>
-    </RouterLink>
+    </RouterLink> -->
+    <BackButton />
   </div>
   <h1>Patterns</h1>
   <div class="layout">
     <div class="update">
       <div class="page">
         <RouterLink :to="{ path: '/', query: { pattern: 'Alternate rows' } }">
-          <img src="src/images/alt row.png" alt="alternate rows">
+          <img src="src/images/alt row.png" alt="alternate rows" />
         </RouterLink>
         <div class="name" id="alt_r">Alternate rows</div>
       </div>
@@ -21,7 +22,7 @@ import { RouterLink, useRouter } from "vue-router";
     <div class="update">
       <div class="page">
         <RouterLink :to="{ path: '/', query: { pattern: 'Alternate columns' } }">
-          <img src="src/images/alt col.png" alt="alternate columns">
+          <img src="src/images/alt col.png" alt="alternate columns" />
         </RouterLink>
         <div class="name" id="alt_c">Alternate columns</div>
       </div>
@@ -29,7 +30,7 @@ import { RouterLink, useRouter } from "vue-router";
     <div class="update">
       <div class="page">
         <RouterLink :to="{ path: '/', query: { pattern: 'Gradient' } }">
-          <img src="src/images/gradient.png" alt="gradient">
+          <img src="src/images/gradient.png" alt="gradient" />
         </RouterLink>
         <div class="name" id="grad">Gradient</div>
       </div>
@@ -37,7 +38,7 @@ import { RouterLink, useRouter } from "vue-router";
     <div class="update">
       <div class="page">
         <RouterLink :to="{ path: '/', query: { pattern: 'Row on' } }">
-          <img src="src/images/row on.png" alt="row on">
+          <img src="src/images/row on.png" alt="row on" />
         </RouterLink>
         <div class="name" id="row_on">Row on</div>
       </div>
@@ -45,7 +46,7 @@ import { RouterLink, useRouter } from "vue-router";
     <div class="update">
       <div class="page">
         <RouterLink :to="{ path: '/', query: { pattern: 'Row off' } }">
-          <img src="src/images/row off.png" alt="row off">
+          <img src="src/images/row off.png" alt="row off" />
         </RouterLink>
         <div class="name" id="row_off">Row off</div>
       </div>
@@ -53,7 +54,7 @@ import { RouterLink, useRouter } from "vue-router";
     <div class="update">
       <div class="page">
         <RouterLink :to="{ path: '/', query: { pattern: 'Column on' } }">
-          <img src="src/images/col on.png" alt="column off">
+          <img src="src/images/col on.png" alt="column off" />
         </RouterLink>
         <div class="name" id="col_on">Column on</div>
       </div>
@@ -61,7 +62,7 @@ import { RouterLink, useRouter } from "vue-router";
     <div class="update">
       <div class="page">
         <RouterLink :to="{ path: '/', query: { pattern: 'Column off' } }">
-          <img src="src/images/col off.png" alt="column off">
+          <img src="src/images/col off.png" alt="column off" />
         </RouterLink>
         <div class="name" id="col_off">Column off</div>
       </div>
@@ -70,7 +71,7 @@ import { RouterLink, useRouter } from "vue-router";
     <div class="update">
       <div class="page">
         <RouterLink :to="{ path: '/', query: { pattern: 'Middle on' } }">
-          <img src="src/images/middle on .png" alt="middle on">
+          <img src="src/images/middle on .png" alt="middle on" />
         </RouterLink>
         <div class="name" id="mid_on">Middle on</div>
       </div>
@@ -78,7 +79,7 @@ import { RouterLink, useRouter } from "vue-router";
     <div class="update">
       <div class="page">
         <RouterLink :to="{ path: '/', query: { pattern: 'Middle off' } }">
-          <img src="src/images/middle off.png" alt="middle off">
+          <img src="src/images/middle off.png" alt="middle off" />
         </RouterLink>
         <div class="name" id="mid_off">Middle off</div>
       </div>
@@ -86,7 +87,7 @@ import { RouterLink, useRouter } from "vue-router";
     <div class="update">
       <div class="page">
         <RouterLink :to="{ path: '/', query: { pattern: 'Checkerboard' } }">
-          <img src="src/images/checkerboard.png" alt="checkerboard">
+          <img src="src/images/checkerboard.png" alt="checkerboard" />
         </RouterLink>
         <div class="name" id="checker">Checkerboard</div>
       </div>
@@ -94,7 +95,7 @@ import { RouterLink, useRouter } from "vue-router";
     <div class="update">
       <div class="page">
         <RouterLink :to="{ path: '/', query: { pattern: 'Random' } }">
-          <img src="src/images/random.png" alt="random">
+          <img src="src/images/random.png" alt="random" />
         </RouterLink>
         <div class="name" id="random">Random</div>
       </div>
@@ -102,16 +103,17 @@ import { RouterLink, useRouter } from "vue-router";
     <div class="update">
       <div class="page">
         <RouterLink :to="{ path: '/', query: { pattern: 'Grid' } }">
-          <img src="src/images/grid.png" alt="grid">
+          <img src="src/images/grid.png" alt="grid" />
         </RouterLink>
         <div class="name" id="grid">Grid</div>
       </div>
     </div>
   </div>
+
   <div class="update">
     <div class="page">
       <RouterLink :to="{ path: '/', query: { pattern: 'Gaussian' } }">
-        <img src="src/images/gaussian.png" alt="gaussian">
+        <img src="src/images/gaussian.png" alt="gaussian" />
       </RouterLink>
       <div class="name" id="grid">Gaussian</div>
     </div>
@@ -135,7 +137,7 @@ import { RouterLink, useRouter } from "vue-router";
 }
 
 .page:hover {
-  border: 1px solid #060000
+  border: 1px solid #060000;
 }
 
 .page img {
@@ -165,7 +167,6 @@ import { RouterLink, useRouter } from "vue-router";
   .update {
     width: 100%;
   }
-
 }
 
 .back-link {

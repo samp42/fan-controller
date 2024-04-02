@@ -1,48 +1,64 @@
+<template>
+  <div class="header">
+    <Header @run="runPattern" @stop="stopPattern" />
+  </div>
+
+  <div class="app-content">
+    <RouterView ref="homePage"></RouterView>
+  </div>
+</template>
+
 <script setup lang="ts">
 import Header from "./components/Header.vue";
 import { RouterView } from "vue-router";
+import { ref } from "vue";
+import { invoke } from "@tauri-apps/api";
+import { useGridStore } from "./store";
+
+const homePage = ref();
+
+function runPattern(): void {
+  const grid = useGridStore();
+  console.log(grid);
+
+  // map grid by taking only the value attribute
+  const gridValue = grid.grid.map((row) => row.value);
+
+  invoke("run_pattern", { port: grid.port, gridValue: gridValue }).then((p: any) => {
+    console.log(p);
+  });
+}
+
+function stopPattern(): void {
+  const grid = useGridStore();
+  console.log("stop");
+  invoke("stop_pattern", { port: grid.port }).then((p: any) => {
+    console.log(p);
+  });
+}
 </script>
 
-<template>
-<Header/>
-<!-- <h2 class="header">PatternName</h2>
-<div style="overflow-x:auto;">
-  <form>
-    <div class="center">
-    <Table></Table>
-    <div class="">
-      <button @click="clear()">Clear</button>
-    </div>
-    </div>
-  </form>
-</div> -->
-<RouterView></RouterView>
-</template>
-
 <style>
-.layout {  
-  min-width:450px; 
-}
 .header {
-text-align: center;
+  text-align: center;
+  position: fixed;
+  width: 100%;
+  left: 0;
+  top: 0;
+  z-index: 100;
 }
+
+.app-content {
+  margin-top: 54px;
+  overflow: scroll;
+  margin-bottom: 50px;
+}
+
 .center {
-  min-width:600px;
+  min-width: 600px;
   margin: auto;
   width: 40%;
   text-align: center;
   box-sizing: border-box;
-}
-.column{
-  float:center; 
-}
-.button{
-justify-content: flex-end;
-text-align: center;
-}
-.row::after {
-  content: "";
-  display: table;
-  clear: both;
 }
 </style>
