@@ -5,6 +5,8 @@ import App from "./App.vue";
 import HomeVue from "./components/Home.vue";
 import HelpVue from "./components/Help.vue";
 import PatternsVue from "./components/Patterns.vue"
+import { createPinia } from 'pinia';
+import { useGridStore } from './store';
 
 const routes = [
     { path: '/', component: HomeVue },
@@ -16,9 +18,13 @@ const router = createRouter({
     history: createWebHistory(),
     routes,
 });
+const pinia = createPinia();
 
 const app = createApp(App);
 
 app.use(router);
-
+app.use(pinia); 
 app.mount("#app");
+
+app.config.globalProperties.$gridStore = useGridStore();
+

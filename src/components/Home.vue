@@ -1,14 +1,15 @@
 <script setup lang="ts">
 import Table from "./Table.vue";
+import { useGridStore } from '../store';
 
-const defaultPattern = ''; 
+const grid = useGridStore(); 
 </script>
 
 <template>
     <div style="overflow-x:auto;">
         <!--<input type="text" placeholder="Pattern Name" />-->
         <div class="center">
-            <Table class="table" :patternName="defaultPattern"></Table>
+            <Table class="table"></Table>
         </div>
     </div>
 </template>

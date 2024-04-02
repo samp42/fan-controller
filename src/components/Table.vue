@@ -84,14 +84,20 @@
         <label for="middleOnOff">On/Off</label>
     </div>
 
-    <!--<div v-else-if="patternName === 'grid' || patternName === 'Grid'">
+    <div v-else-if="patternName === 'grid' || patternName === 'Grid'">
       <label for="size">Size:</label>
-      <input type="number" id="size" >
-      <label for="value">Value:</label>
-      <input type="number" id="value" >
-      <label for="reverse">Reverse:</label>
-      <input type="checkbox" id="reverse" >
-    </div>-->
+        <input class = "patternInput" type="text" id="size" >
+        <label for="speed"> Speed:</label>
+        <input class = "patternInput" type="text" id="speed" >  
+        <input class="checkbox" type="checkbox" id="grid" >
+        <label for="grid">Reverse</label> 
+    </div>
+    <div v-else-if="patternName === 'gaussian' || patternName === 'Gaussian'">
+      <label for="mean">Mean:</label>
+        <input class = "patternInput" type="text" id="mean" >
+        <label for="sigma"> Sigma:</label>
+        <input class = "patternInput" type="text" id="sigma" >   
+    </div>
     <br>
     <button type="button" @click="clear()">Clear</button>
     <button type="button" @click="getPattern()">Enter</button>
@@ -99,14 +105,18 @@
 </template>
 
     <script lang="ts">  
-    import {RouteLocationNormalizedLoaded, Router} from 'vue-router'; 
+    import {RouteLocationNormalizedLoaded } from 'vue-router'; 
+    import { useGridStore } from '../store';
+
+    //const grid = useGridStore();
+    //const patternName = ''; // Assuming it's predefined or comes from props
+
     export default {
         data() {
             return {
                 //grid: Array<Number>(81).fill(0)
                     patternName: '',
-                    grid: Array(81).fill(0).map(() => ({ value: 0, disabled: false })),
-                    
+                    grid: [] as { value: number; disabled: boolean }[],                    
                 };
         },
         mounted() {
@@ -118,6 +128,8 @@
         created() {
         const route = this.$route as RouteLocationNormalizedLoaded;
         this.patternName = route.query.pattern as string;
+        const gridStore = useGridStore();
+        this.grid = gridStore.grid;
         },
         methods: {
             getValue(){
@@ -129,91 +141,95 @@
                 switch(input){
                     case "random":
                         this.randomFill() ; 
-                    break; 
+                        break; 
                     case "gradient":
                         var check = (<HTMLInputElement>document.getElementById("gradientReverse")).checked;
                         var min = (<HTMLInputElement>document.getElementById("min")).value;
                         var max = (<HTMLInputElement>document.getElementById("max")).value;
                         var rowCol = (<HTMLInputElement>document.getElementById("rowCol")).checked;
                         this.gradient(parseInt(min), parseInt(max), rowCol,  check);
-                    break; 
+                        break; 
                     case "alternate rows": 
                         var check = (<HTMLInputElement>document.getElementById("reverseAlt")).checked;
                         var speed = (<HTMLInputElement>document.getElementById("speed")).value;
                         var size = (<HTMLInputElement>document.getElementById("size")).value;
-
                         this.altRows(parseInt(size), parseInt(speed), check); 
-                    break; 
+                        break; 
                     case "row on":
-                    var check = (<HTMLInputElement>document.getElementById("rowOnOff")).checked;
+                        var check = (<HTMLInputElement>document.getElementById("rowOnOff")).checked;
                         var speed = (<HTMLInputElement>document.getElementById("speed")).value;
-                            var size = (<HTMLInputElement>document.getElementById("size")).value;
-
+                        var size = (<HTMLInputElement>document.getElementById("size")).value;
                         this.singleRow(parseInt(size), parseInt(speed), check); 
-                    break;
+                        break;
                     case "row off":
-                    var check = (<HTMLInputElement>document.getElementById("rowOnOff")).checked;
+                        var check = (<HTMLInputElement>document.getElementById("rowOnOff")).checked;
                         var speed = (<HTMLInputElement>document.getElementById("speed")).value;
-                            var size = (<HTMLInputElement>document.getElementById("size")).value;
-
+                        var size = (<HTMLInputElement>document.getElementById("size")).value;
                         this.singleRow(parseInt(size), parseInt(speed), check); 
-                    break; 
+                        break; 
                     case "alternate columns":
-                    var check = (<HTMLInputElement>document.getElementById("reverseAlt")).checked;
+                        var check = (<HTMLInputElement>document.getElementById("reverseAlt")).checked;
                         var speed = (<HTMLInputElement>document.getElementById("speed")).value;
-                            var size = (<HTMLInputElement>document.getElementById("size")).value;
-
+                        var size = (<HTMLInputElement>document.getElementById("size")).value;
                         this.altCols(parseInt(size), parseInt(speed), check); 
-                    break; 
+                        break; 
                     case "column on":
-                    var check = (<HTMLInputElement>document.getElementById("rowOnOff")).checked;
+                        var check = (<HTMLInputElement>document.getElementById("rowOnOff")).checked;
                         var speed = (<HTMLInputElement>document.getElementById("speed")).value;
-                            var size = (<HTMLInputElement>document.getElementById("size")).value;
-
+                        var size = (<HTMLInputElement>document.getElementById("size")).value;
                         this.singleCol(parseInt(size), parseInt(speed), check); 
-                    break; 
+                        break; 
                     case "column off":
-                    var check = (<HTMLInputElement>document.getElementById("rowOnOff")).checked;
+                        var check = (<HTMLInputElement>document.getElementById("rowOnOff")).checked;
                         var speed = (<HTMLInputElement>document.getElementById("speed")).value;
-                            var size = (<HTMLInputElement>document.getElementById("size")).value;
-
+                        var size = (<HTMLInputElement>document.getElementById("size")).value;
                         this.singleCol(parseInt(size), parseInt(speed), check); 
-                    break;
+                        break;
                     case "middle on":
-                    var check = (<HTMLInputElement>document.getElementById("middleOnOff")).checked;
+                        var check = (<HTMLInputElement>document.getElementById("middleOnOff")).checked;
                         var speed = (<HTMLInputElement>document.getElementById("speed")).value;
                         this.middle(parseInt(speed), check); 
-                    break;
+                        break;
                     case "middle off":
-                    var check = (<HTMLInputElement>document.getElementById("middleOnOff")).checked;
+                        var check = (<HTMLInputElement>document.getElementById("middleOnOff")).checked;
                         var speed = (<HTMLInputElement>document.getElementById("speed")).value;
                         this.middle(parseInt(speed), check); 
-                    break;
+                        break;
                     case "grid":
-                    var speed = (<HTMLInputElement>document.getElementById("speed")).value;
-                        this.gridPattern(parseInt(speed),1,2, true);
-                    break; 
-                    case "checkerboard":
-                    var check = (<HTMLInputElement>document.getElementById("check")).checked;
                         var speed = (<HTMLInputElement>document.getElementById("speed")).value;
-                            var size = (<HTMLInputElement>document.getElementById("size")).value;
+                        var size = (<HTMLInputElement>document.getElementById("size")).value;
+                        var check = (<HTMLInputElement>document.getElementById("grid")).checked;
+                        this.gridPattern(parseInt(speed),parseInt(size),parseInt(size), check);
+                        break; 
+                    case "checkerboard":
+                        var check = (<HTMLInputElement>document.getElementById("check")).checked;
+                        var speed = (<HTMLInputElement>document.getElementById("speed")).value;
+                        var size = (<HTMLInputElement>document.getElementById("size")).value;
                         this.checkerBoard(parseInt(size),parseInt(speed), check);
-                    break;  
+                        break;  
+                    case "jet":
+                        var check = (<HTMLInputElement>document.getElementById("check")).checked;
+                        var speed = (<HTMLInputElement>document.getElementById("speed")).value;
+                        var size = (<HTMLInputElement>document.getElementById("size")).value;
+                        this.jetflow(55);
+                        break; 
+                    case "gaussian":
+                        var mean = (<HTMLInputElement>document.getElementById("mean")).value;
+                        var sigma = (<HTMLInputElement>document.getElementById("sigma")).value;
+                        this.gaussian(mean, sigma);
+                        break;  
                     default: 
-                (<HTMLInputElement>document.getElementById("pattern")).value = '';
-                }
-                
+                        (<HTMLInputElement>document.getElementById("pattern")).value = '';
+                }  
             },
             getColor(row: number, column: number) {
                 const gridValue = this.grid[9 * (row - 1) + column - 1];
-    
                 // check if gridValue contains only numbers
                 if(isNaN(gridValue.value)) {
                     return '';
                 }
-    
                 const value = gridValue.value;
-    
+
                 if(value == 0) {
                     return 'white';
                 }
@@ -237,7 +253,6 @@
             },
     randomFill() {
       this.clear();
-    
       for (let i = 0; i < 9; i++) {
         for (let j = 0; j < 9; j++) {
           this.grid[9 * i + j] = { value: Math.floor(Math.random() * 101), disabled: false };
@@ -257,8 +272,7 @@
         }
       }
     },
-    
-      singleRow(row: number, val: number, on: boolean){ //NUMBERING FROM 0 TO 8 OR FROM 1 TO 9 (RN: 1 TO 0)
+    singleRow(row: number, val: number, on: boolean){ //NUMBERING FROM 0 TO 8 OR FROM 1 TO 9 (RN: 1 TO 0)
         this.grid = this.grid.map((cell, index) => ({
         value: on ? (Math.floor(index / 9)+1 === row ? val : 0) : (Math.floor(index / 9)+1 === row ? 0 : val),
         disabled: cell.disabled
@@ -297,21 +311,18 @@
         }));
       }
     },
-    gridPattern(val: number, lines: number, square: number, on: boolean) {
-      this.clear(); // Clear the grid
-    
-      const size = 9; // Size of the grid
-    
-      for (let i = 0; i < size; i++) {
-        for (let j = 0; j < size; j++) {
-          const isSquare = Math.floor(i / square) % 2 === 0 && Math.floor(j / square) % 2 === 0;
-          const isLine = (Math.floor(i / lines) % 2 === 0 || Math.floor(j / lines) % 2 === 0) && !isSquare;
-    
-          const displayValue = on ? (isSquare ? val : 0) : (isLine ? val : 0);
-    
-          this.grid[size * i + j] = { value: displayValue, disabled: false };
-        }
-      }
+    gridPattern(val: number, lines: number, cols: number, on: boolean) {
+        this.grid = this.grid.map((cell, index) => {
+            const row = Math.floor(index / 9);
+            const col = index % 9;
+            
+            const isAltRow = Math.floor(row / lines) % 2 === (on ? 0 : 1);
+            const isAltCol = Math.floor(col / cols) % 2 === (on ? 0 : 1);
+            
+            const displayValue = (isAltRow || isAltCol) ? val : 0;
+            
+            return { value: displayValue, disabled: cell.disabled };
+        });
     },
     gradient(min: number, max: number, row: boolean, on: boolean) {
       //this.clear(); // Clear the grid
@@ -332,6 +343,23 @@
         }
       }
     },
+  gaussian(mean: number, sigma: number) {
+  // Define the Gaussian function
+  const gaussian = function(row, col) {
+    return Math.exp(-((row - mean) ** 2 + (col - mean) ** 2) / (2 * sigma ** 2));
+  };
+  
+  // Clear the grid before applying the pattern
+  this.clear();
+  
+  // Apply the Gaussian pattern to the grid
+  for (let i = 1; i < 10; i++) {
+    for (let j = 1; j < 10; j++) {
+      const value = Math.floor(gaussian(i, j) * 100); // Scale to [0, 100]
+      this.grid[9 * (i - 1) + (j - 1)].value = value; // Adjusted row and column numbering
+    }
+  }
+},
         clear(){
             //this.grid.fill({ value: 0, disabled: false });
             //(<HTMLInputElement>document.getElementById("speed")).value = '';
