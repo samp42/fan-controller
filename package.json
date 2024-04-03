@@ -12,12 +12,14 @@
   "dependencies": {
     "@tauri-apps/api": "^1.5.0",
     "csv-reader": "^1.0.12",
+    "papaparse": "^5.4.1",
     "pinia": "^2.1.7",
     "vue": "^3.3.4",
     "vue-router": "^4.3.0"
   },
   "devDependencies": {
     "@tauri-apps/cli": "^1.5.0",
+    "@types/papaparse": "^5.3.14",
     "@vitejs/plugin-vue": "^4.2.3",
     "typescript": "^5.0.2",
     "vite": "^4.4.4",

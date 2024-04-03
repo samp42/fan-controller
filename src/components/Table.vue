@@ -32,7 +32,7 @@
       </div>
     </div>
   </div>
-  <span class="br"></span>  
+  <span class="br"></span>
   <div v-if="patternName === 'checkerboard' || patternName === 'Checkerboard'">
     <label for="size">Size:</label>
     <input class="patternInput" type="text" id="size" />
@@ -85,7 +85,6 @@
     <label for="rowCol">Row:</label>
     <input class="checkbox" type="checkbox" id="gradientReverse" />
     <label for="gradientReverse">Reverse:</label>
-    
   </div>
 
   <div v-else-if="patternName === 'random' || patternName === 'Random'">
@@ -99,26 +98,16 @@
         <input type="checkbox" id="randomReverse" >
     -->
   </div>
-  <div
-    v-else-if="
-      patternName === 'Middle off' ||
-      patternName === 'middle off'
-    "
-  >
+  <div v-else-if="patternName === 'Middle off' || patternName === 'middle off'">
     <label for="speed">Speed:</label>
     <input class="patternInput" type="text" id="speed" />
     <input class="checkbox" type="checkbox" id="middleOnOff" />
     <label for="middleOnOff">On/Off</label>
   </div>
-  <div
-    v-else-if="
-      patternName === 'Middle on' ||
-      patternName === 'middle on'
-    "
-  >
+  <div v-else-if="patternName === 'Middle on' || patternName === 'middle on'">
     <label for="speed">Speed:</label>
-    <input class="patternInput" type="text" id="speed" required/>
-    <input class="checkbox" type="checkbox" id="middleOnOff" checked/>
+    <input class="patternInput" type="text" id="speed" required />
+    <input class="checkbox" type="checkbox" id="middleOnOff" checked />
     <label for="middleOnOff">On/Off</label>
   </div>
 
@@ -136,16 +125,18 @@
     <label for="sigma"> Sigma:</label>
     <input class="patternInput" type="text" id="sigma" />
   </div>
-  <span class="br"></span>  
-  <div class="button-container">  <button type="button" @click="clear()">Clear</button>
-  <button type="button" @click="getPattern()">Enter</button>
-  <p id="p" class="err" style="color: red; font-weight: bold;"></p></div>
+  <span class="br"></span>
+  <div class="button-container">
+    <button type="button" @click="clear()">Clear</button>
+    <button type="button" @click="getPattern()">Enter</button>
+    <p id="p" class="err" style="color: red; font-weight: bold"></p>
+  </div>
   <span class="br"></span>
 </template>
 
 <script lang="ts">
 import { RouteLocationNormalizedLoaded } from "vue-router";
-import { useGridStore } from "../store";
+import { PatternType, useGridStore } from "../store";
 
 export default {
   data() {
@@ -158,6 +149,7 @@ export default {
     grid(newValue) {
       const gridStore = useGridStore();
       gridStore.grid = newValue;
+      gridStore.usePatternType = PatternType.Static;
       console.log(newValue);
     },
   },
@@ -183,181 +175,183 @@ export default {
         document.getElementById("pattern")
       )).value.toLowerCase();
       const message = document.getElementById("p");
-      message.innerHTML = "";
-      try{
-      switch (input) {
-        case "random":
-          this.randomFill();
-          break;
-        case "gradient":
-          var check = (<HTMLInputElement>document.getElementById("gradientReverse")).checked;
-          var min = (<HTMLInputElement>document.getElementById("min")).value;
-          var max = (<HTMLInputElement>document.getElementById("max")).value;
-          
-          if(min == "" || max =="") throw "empty";
-          if(!min.match(/^[0-9]+$/)||!max.match(/^[0-9]+$/)) throw "invalid";
-          if(isNaN(parseInt(min)) || isNaN(parseInt(max))) throw "not a number";
-          if(parseInt(min) < 0 ) throw "too low";
-          if(parseInt(max) > 100 ) throw "too high";
-         
-          var rowCol = (<HTMLInputElement>document.getElementById("rowCol")).checked;
-          this.gradient(parseInt(min), parseInt(max), rowCol, check);
-          break;
-        case "alternate rows":
-          var check = (<HTMLInputElement>document.getElementById("reverseAlt")).checked;
-          var speed = (<HTMLInputElement>document.getElementById("speed")).value;
-          var size = (<HTMLInputElement>document.getElementById("size")).value;
+      message!.innerHTML = "";
+      try {
+        switch (input) {
+          case "random":
+            this.randomFill();
+            break;
+          case "gradient":
+            var check = (<HTMLInputElement>document.getElementById("gradientReverse"))
+              .checked;
+            var min = (<HTMLInputElement>document.getElementById("min")).value;
+            var max = (<HTMLInputElement>document.getElementById("max")).value;
 
-          if(speed == "" || size =="") throw "empty";
-          if(!speed.match(/^[0-9]+$/)||!size.match(/^[0-9]+$/)) throw "invalid";
-          if(isNaN(parseInt(speed)) || isNaN(parseInt(size))) throw "not a number";
-          if(parseInt(speed) < 0 || parseInt(size) < 0) throw "too low";
-          if(parseInt(speed) > 100 ||parseInt(size) > 9 ) throw "too high";
+            if (min == "" || max == "") throw "empty";
+            if (!min.match(/^[0-9]+$/) || !max.match(/^[0-9]+$/)) throw "invalid";
+            if (isNaN(parseInt(min)) || isNaN(parseInt(max))) throw "not a number";
+            if (parseInt(min) < 0) throw "too low";
+            if (parseInt(max) > 100) throw "too high";
 
-          this.altRows(parseInt(size), parseInt(speed), check);
-          break;
-        case "row on":
-          var check = (<HTMLInputElement>document.getElementById("rowOnOff")).checked;
-          var speed = (<HTMLInputElement>document.getElementById("speed")).value;
-          var size = (<HTMLInputElement>document.getElementById("size")).value;
+            var rowCol = (<HTMLInputElement>document.getElementById("rowCol")).checked;
+            this.gradient(parseInt(min), parseInt(max), rowCol, check);
+            break;
+          case "alternate rows":
+            var check = (<HTMLInputElement>document.getElementById("reverseAlt")).checked;
+            var speed = (<HTMLInputElement>document.getElementById("speed")).value;
+            var size = (<HTMLInputElement>document.getElementById("size")).value;
 
-          if(speed == "" || size =="") throw "empty";
-          if(!speed.match(/^[0-9]+$/)||!size.match(/^[0-9]+$/)) throw "invalid";
-          if(isNaN(parseInt(speed)) || isNaN(parseInt(size))) throw "not a number";
-          if(parseInt(speed) < 0 || parseInt(size) < 0) throw "too low";
-          if(parseInt(speed) > 100 ||parseInt(size) > 9 ) throw "too high";
+            if (speed == "" || size == "") throw "empty";
+            if (!speed.match(/^[0-9]+$/) || !size.match(/^[0-9]+$/)) throw "invalid";
+            if (isNaN(parseInt(speed)) || isNaN(parseInt(size))) throw "not a number";
+            if (parseInt(speed) < 0 || parseInt(size) < 0) throw "too low";
+            if (parseInt(speed) > 100 || parseInt(size) > 9) throw "too high";
 
-          this.singleRow(parseInt(size), parseInt(speed), check);
-          break;
-        case "row off":
-          var check = (<HTMLInputElement>document.getElementById("rowOnOff")).checked;
-          var speed = (<HTMLInputElement>document.getElementById("speed")).value;
-          var size = (<HTMLInputElement>document.getElementById("size")).value;
-          
-          if(speed == "" || size =="") throw "empty";
-          if(!speed.match(/^[0-9]+$/)||!size.match(/^[0-9]+$/)) throw "invalid";
-          if(isNaN(parseInt(speed)) || isNaN(parseInt(size))) throw "not a number";
-          if(parseInt(speed) < 0 || parseInt(size) < 0) throw "too low";
-          if(parseInt(speed) > 100 ||parseInt(size) > 9 ) throw "too high";
+            this.altRows(parseInt(size), parseInt(speed), check);
+            break;
+          case "row on":
+            var check = (<HTMLInputElement>document.getElementById("rowOnOff")).checked;
+            var speed = (<HTMLInputElement>document.getElementById("speed")).value;
+            var size = (<HTMLInputElement>document.getElementById("size")).value;
 
-          this.singleRow(parseInt(size), parseInt(speed), check);
-          
-          break;
-        case "alternate columns":
-          var check = (<HTMLInputElement>document.getElementById("reverseAlt")).checked;
-          var speed = (<HTMLInputElement>document.getElementById("speed")).value;
-          var size = (<HTMLInputElement>document.getElementById("size")).value;
-          
-          if(speed == "" || size =="") throw "empty";
-          if(!speed.match(/^[0-9]+$/)||!size.match(/^[0-9]+$/)) throw "invalid";
-          if(isNaN(parseInt(speed)) || isNaN(parseInt(size))) throw "not a number";
-          if(parseInt(speed) < 0 || parseInt(size) < 0) throw "too low";
-          if(parseInt(speed) > 100 ||parseInt(size) > 9 ) throw "too high";
+            if (speed == "" || size == "") throw "empty";
+            if (!speed.match(/^[0-9]+$/) || !size.match(/^[0-9]+$/)) throw "invalid";
+            if (isNaN(parseInt(speed)) || isNaN(parseInt(size))) throw "not a number";
+            if (parseInt(speed) < 0 || parseInt(size) < 0) throw "too low";
+            if (parseInt(speed) > 100 || parseInt(size) > 9) throw "too high";
 
-          this.altCols(parseInt(size), parseInt(speed), check);
-          break;
-        case "column on":
-          var check = (<HTMLInputElement>document.getElementById("rowOnOff")).checked;
-          var speed = (<HTMLInputElement>document.getElementById("speed")).value;
-          var size = (<HTMLInputElement>document.getElementById("size")).value;
-          
-          if(speed == "" || size =="") throw "empty";
-          if(!speed.match(/^[0-9]+$/)||!size.match(/^[0-9]+$/)) throw "invalid";
-          if(isNaN(parseInt(speed)) || isNaN(parseInt(size))) throw "not a number";
-          if(parseInt(speed) < 0 || parseInt(size) < 0) throw "too low";
-          if(parseInt(speed) > 100 ||parseInt(size) > 9 ) throw "too high";
+            this.singleRow(parseInt(size), parseInt(speed), check);
+            break;
+          case "row off":
+            var check = (<HTMLInputElement>document.getElementById("rowOnOff")).checked;
+            var speed = (<HTMLInputElement>document.getElementById("speed")).value;
+            var size = (<HTMLInputElement>document.getElementById("size")).value;
 
-          this.singleCol(parseInt(size), parseInt(speed), check);
-          break;
-        case "column off":
-          var check = (<HTMLInputElement>document.getElementById("rowOnOff")).checked;
-          var speed = (<HTMLInputElement>document.getElementById("speed")).value;
-          var size = (<HTMLInputElement>document.getElementById("size")).value;
-          
-          if(speed == "" || size =="") throw "empty";
-          if(!speed.match(/^[0-9]+$/)||!size.match(/^[0-9]+$/)) throw "invalid";
-          if(isNaN(parseInt(speed)) || isNaN(parseInt(size))) throw "not a number";
-          if(parseInt(speed) < 0 || parseInt(size) < 0) throw "too low";
-          if(parseInt(speed) > 100 ||parseInt(size) > 9 ) throw "too high";
+            if (speed == "" || size == "") throw "empty";
+            if (!speed.match(/^[0-9]+$/) || !size.match(/^[0-9]+$/)) throw "invalid";
+            if (isNaN(parseInt(speed)) || isNaN(parseInt(size))) throw "not a number";
+            if (parseInt(speed) < 0 || parseInt(size) < 0) throw "too low";
+            if (parseInt(speed) > 100 || parseInt(size) > 9) throw "too high";
 
-          this.singleCol(parseInt(size), parseInt(speed), check);
-          break;
-        case "middle on":
-          var check = (<HTMLInputElement>document.getElementById("middleOnOff")).checked;
-          var speed = (<HTMLInputElement>document.getElementById("speed")).value;
-          
-          if(speed == "" ) throw "empty";
-          if(!speed.match(/^[0-9]+$/)) throw "invalid";
-          if(isNaN(parseInt(speed)) ) throw "not a number";
-          if(parseInt(speed) < 0 ) throw "too low";
-          if(parseInt(speed) > 100 ) throw "too high";
+            this.singleRow(parseInt(size), parseInt(speed), check);
 
-          this.middle(parseInt(speed), check);
-          break;
-        case "middle off":
-          var check = (<HTMLInputElement>document.getElementById("middleOnOff")).checked;
-          var speed = (<HTMLInputElement>document.getElementById("speed")).value;
-          
-          if(speed == "" ) throw "empty";
-          if(!speed.match(/^[0-9]+$/)) throw "invalid";
-          if(isNaN(parseInt(speed)) ) throw "not a number";
-          if(parseInt(speed) < 0 ) throw "too low";
-          if(parseInt(speed) > 100 ) throw "too high";
+            break;
+          case "alternate columns":
+            var check = (<HTMLInputElement>document.getElementById("reverseAlt")).checked;
+            var speed = (<HTMLInputElement>document.getElementById("speed")).value;
+            var size = (<HTMLInputElement>document.getElementById("size")).value;
 
-          this.middle(parseInt(speed), check);
-          break;
-        case "grid":
-          var speed = (<HTMLInputElement>document.getElementById("speed")).value;
-          var size = (<HTMLInputElement>document.getElementById("size")).value;
-          var check = (<HTMLInputElement>document.getElementById("grid")).checked;
+            if (speed == "" || size == "") throw "empty";
+            if (!speed.match(/^[0-9]+$/) || !size.match(/^[0-9]+$/)) throw "invalid";
+            if (isNaN(parseInt(speed)) || isNaN(parseInt(size))) throw "not a number";
+            if (parseInt(speed) < 0 || parseInt(size) < 0) throw "too low";
+            if (parseInt(speed) > 100 || parseInt(size) > 9) throw "too high";
 
-          if(speed == "" || size =="") throw "empty";
-          if(!speed.match(/^[0-9]+$/)||!size.match(/^[0-9]+$/)) throw "invalid";
-          if(isNaN(parseInt(speed)) || isNaN(parseInt(size))) throw "not a number";
-          if(parseInt(speed) < 0 || parseInt(size) < 0) throw "too low";
-          if(parseInt(speed) > 100 ||parseInt(size) > 9 ) throw "too high";
+            this.altCols(parseInt(size), parseInt(speed), check);
+            break;
+          case "column on":
+            var check = (<HTMLInputElement>document.getElementById("rowOnOff")).checked;
+            var speed = (<HTMLInputElement>document.getElementById("speed")).value;
+            var size = (<HTMLInputElement>document.getElementById("size")).value;
 
-          this.gridPattern(parseInt(speed), parseInt(size), parseInt(size), check);
-          break;
-        case "checkerboard":
-          var check = (<HTMLInputElement>document.getElementById("check")).checked;
-          var speed = (<HTMLInputElement>document.getElementById("speed")).value;
-          var size = (<HTMLInputElement>document.getElementById("size")).value;
-          
-          if(speed == "" || size =="") throw "empty";
-          if(!speed.match(/^[0-9]+$/)||!size.match(/^[0-9]+$/)) throw "invalid";
-          if(isNaN(parseInt(speed)) || isNaN(parseInt(size))) throw "not a number";
-          if(parseInt(speed) < 0 || parseInt(size) < 0) throw "too low";
-          if(parseInt(speed) > 100 ||parseInt(size) > 9 ) throw "too high";
+            if (speed == "" || size == "") throw "empty";
+            if (!speed.match(/^[0-9]+$/) || !size.match(/^[0-9]+$/)) throw "invalid";
+            if (isNaN(parseInt(speed)) || isNaN(parseInt(size))) throw "not a number";
+            if (parseInt(speed) < 0 || parseInt(size) < 0) throw "too low";
+            if (parseInt(speed) > 100 || parseInt(size) > 9) throw "too high";
 
-          this.checkerBoard(parseInt(size), parseInt(speed), check);
-          break;
-        // TODO: Implement jetflow
-        // case "jet":
-        //   var check = (<HTMLInputElement>document.getElementById("check")).checked;
-        //   var speed = (<HTMLInputElement>document.getElementById("speed")).value;
-        //   var size = (<HTMLInputElement>document.getElementById("size")).value;
-        //   this.jetflow(55);
-        //   break;
-        case "gaussian":
-          var mean = (<HTMLInputElement>document.getElementById("mean")).value;
-          var sigma = (<HTMLInputElement>document.getElementById("sigma")).value;
-          
-          if(mean == "" || sigma =="") throw "empty";
-          if(!mean.match(/^[0-9]+$/)||!sigma.match(/^[0-9]+$/)) throw "invalid";
-          if(isNaN(parseInt(mean)) || isNaN(parseInt(sigma))) throw "not a number";
-          if(parseInt(mean) < 0 || parseInt(sigma) < 0) throw "too low";
-          if(parseInt(mean) > 100 ||parseInt(sigma) > 9 ) throw "too high";
-          
-          this.gaussian(parseInt(mean), parseInt(sigma));
-          break;
-        default:
-          (<HTMLInputElement>document.getElementById("pattern")).value = "";
+            this.singleCol(parseInt(size), parseInt(speed), check);
+            break;
+          case "column off":
+            var check = (<HTMLInputElement>document.getElementById("rowOnOff")).checked;
+            var speed = (<HTMLInputElement>document.getElementById("speed")).value;
+            var size = (<HTMLInputElement>document.getElementById("size")).value;
+
+            if (speed == "" || size == "") throw "empty";
+            if (!speed.match(/^[0-9]+$/) || !size.match(/^[0-9]+$/)) throw "invalid";
+            if (isNaN(parseInt(speed)) || isNaN(parseInt(size))) throw "not a number";
+            if (parseInt(speed) < 0 || parseInt(size) < 0) throw "too low";
+            if (parseInt(speed) > 100 || parseInt(size) > 9) throw "too high";
+
+            this.singleCol(parseInt(size), parseInt(speed), check);
+            break;
+          case "middle on":
+            var check = (<HTMLInputElement>document.getElementById("middleOnOff"))
+              .checked;
+            var speed = (<HTMLInputElement>document.getElementById("speed")).value;
+
+            if (speed == "") throw "empty";
+            if (!speed.match(/^[0-9]+$/)) throw "invalid";
+            if (isNaN(parseInt(speed))) throw "not a number";
+            if (parseInt(speed) < 0) throw "too low";
+            if (parseInt(speed) > 100) throw "too high";
+
+            this.middle(parseInt(speed), check);
+            break;
+          case "middle off":
+            var check = (<HTMLInputElement>document.getElementById("middleOnOff"))
+              .checked;
+            var speed = (<HTMLInputElement>document.getElementById("speed")).value;
+
+            if (speed == "") throw "empty";
+            if (!speed.match(/^[0-9]+$/)) throw "invalid";
+            if (isNaN(parseInt(speed))) throw "not a number";
+            if (parseInt(speed) < 0) throw "too low";
+            if (parseInt(speed) > 100) throw "too high";
+
+            this.middle(parseInt(speed), check);
+            break;
+          case "grid":
+            var speed = (<HTMLInputElement>document.getElementById("speed")).value;
+            var size = (<HTMLInputElement>document.getElementById("size")).value;
+            var check = (<HTMLInputElement>document.getElementById("grid")).checked;
+
+            if (speed == "" || size == "") throw "empty";
+            if (!speed.match(/^[0-9]+$/) || !size.match(/^[0-9]+$/)) throw "invalid";
+            if (isNaN(parseInt(speed)) || isNaN(parseInt(size))) throw "not a number";
+            if (parseInt(speed) < 0 || parseInt(size) < 0) throw "too low";
+            if (parseInt(speed) > 100 || parseInt(size) > 9) throw "too high";
+
+            this.gridPattern(parseInt(speed), parseInt(size), parseInt(size), check);
+            break;
+          case "checkerboard":
+            var check = (<HTMLInputElement>document.getElementById("check")).checked;
+            var speed = (<HTMLInputElement>document.getElementById("speed")).value;
+            var size = (<HTMLInputElement>document.getElementById("size")).value;
+
+            if (speed == "" || size == "") throw "empty";
+            if (!speed.match(/^[0-9]+$/) || !size.match(/^[0-9]+$/)) throw "invalid";
+            if (isNaN(parseInt(speed)) || isNaN(parseInt(size))) throw "not a number";
+            if (parseInt(speed) < 0 || parseInt(size) < 0) throw "too low";
+            if (parseInt(speed) > 100 || parseInt(size) > 9) throw "too high";
+
+            this.checkerBoard(parseInt(size), parseInt(speed), check);
+            break;
+          // TODO: Implement jetflow
+          // case "jet":
+          //   var check = (<HTMLInputElement>document.getElementById("check")).checked;
+          //   var speed = (<HTMLInputElement>document.getElementById("speed")).value;
+          //   var size = (<HTMLInputElement>document.getElementById("size")).value;
+          //   this.jetflow(55);
+          //   break;
+          case "gaussian":
+            var mean = (<HTMLInputElement>document.getElementById("mean")).value;
+            var sigma = (<HTMLInputElement>document.getElementById("sigma")).value;
+
+            if (mean == "" || sigma == "") throw "empty";
+            if (!mean.match(/^[0-9]+$/) || !sigma.match(/^[0-9]+$/)) throw "invalid";
+            if (isNaN(parseInt(mean)) || isNaN(parseInt(sigma))) throw "not a number";
+            if (parseInt(mean) < 0 || parseInt(sigma) < 0) throw "too low";
+            if (parseInt(mean) > 100 || parseInt(sigma) > 9) throw "too high";
+
+            this.gaussian(parseInt(mean), parseInt(sigma));
+            break;
+          default:
+            (<HTMLInputElement>document.getElementById("pattern")).value = "";
+        }
+      } catch (error) {
+        message!.innerHTML = "<b style='color: red;'>Input is " + error + "</b>";
       }
-    }
-    catch (error){
-      message.innerHTML = "<b style='color: red;'>Input is " + error + "</b>";
-    }
     },
     getColor(row: number, column: number) {
       const gridValue = this.grid[9 * (row - 1) + column - 1];
@@ -498,14 +492,14 @@ export default {
 
       for (let i = 1; i < 10; i++) {
         for (let j = 1; j < 10; j++) {
-          const value = Math.floor(gaussian(i, j) * 100); 
-          this.grid[9 * (i - 1) + (j - 1)].value = value; 
+          const value = Math.floor(gaussian(i, j) * 100);
+          this.grid[9 * (i - 1) + (j - 1)].value = value;
         }
       }
     },
     clear() {
       const message = document.getElementById("p");
-      message.innerHTML = "";
+      message!.innerHTML = "";
       for (let i = 0; i < 9; i++) {
         for (let j = 0; j < 9; j++) {
           this.grid[9 * i + j] = { value: 0, disabled: false };
@@ -530,10 +524,10 @@ export default {
 * {
   box-sizing: border-box;
 }
-.br { 
-            display: block; 
-            margin-bottom: 0em; 
-        } 
+.br {
+  display: block;
+  margin-bottom: 0em;
+}
 .layout {
   position: relative;
   width: 100%;
@@ -558,7 +552,7 @@ export default {
   position: absolute;
   top: -10px;
   right: 80px;
-  padding-bottom: 55px; 
+  padding-bottom: 55px;
   color: red;
   font-weight: bold;
 }

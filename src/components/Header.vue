@@ -1,18 +1,14 @@
 <template>
   <div class="header-container">
     <div>
-      <!--class="header-elements"-->
       <div class="button-container">
-        <!-- <button class="header-button dropButton">File</button>
-        <div class="dropContent">
-          <button class="dropdown-button" @click="openFileInput">Load File</button>
-          <input type="file" ref="fileInput" style="display: none" /> -->
-        <!-- <button class="dropdown-button">Save Pattern</button> -->
-        <!-- </div> -->
         <RouterLink to="/" class="header-button">Home</RouterLink>
         <RouterLink to="/patterns" class="header-button">Patterns</RouterLink>
         <RouterLink to="/help" class="header-button">Help</RouterLink>
       </div>
+    </div>
+    <div>
+      <input type="file" accept=".csv" @change="handleFileUpload" />
     </div>
     <div class="navbar-select-container">
       <button class="play-button action-button" @click="$emit('run')">
@@ -39,9 +35,10 @@
 import { ref, onMounted } from "vue";
 import { invoke } from "@tauri-apps/api";
 import Select from "./Select.vue";
+import Papa from "papaparse";
+import { InstantProfile, PatternType, useGridStore } from "../store";
 
 const ports = ref([]);
-// const fileInputRef = ref<HTMLInputElement | null>(null);
 
 function list(): void {
   invoke("list_serial_ports").then((p: any) => {
@@ -49,10 +46,46 @@ function list(): void {
   });
 }
 
-// function openFileInput(): void {
-//   // fileInputRef.value?.click();
-//   // openFile();
-// }
+function handleFileUpload(event: any) {
+  const file = event.target.files[0];
+
+  Papa.parse(file, {
+    complete: (results: any) => {
+      // Extracting data from parsed CSV
+      const parsedData = results.data;
+
+      const instantProfiles: InstantProfile[] = parsedData
+        .map(mapRowToInstantProfile)
+        .filter((profile: InstantProfile | null) => profile !== null);
+
+      const store = useGridStore();
+      store.pattern = { profiles: instantProfiles };
+      store.usePatternType = PatternType.Dynamic;
+
+      console.log(store.pattern);
+    },
+    header: true, // Set to true if your CSV file has headers
+  });
+}
+
+function mapRowToInstantProfile(row: any): InstantProfile | null {
+  if (!row.dt || !row.fan1 || !row.fan81) {
+    // If any required column is missing, return null (invalid)
+    return null;
+  }
+
+  const profile: InstantProfile = {
+    dt: parseInt(row.dt), // Assuming dt is a number
+    fans: [],
+  };
+
+  for (let i = 1; i <= 81; i++) {
+    const fanColumnName = "fan" + i;
+    profile.fans.push(parseInt(row[fanColumnName]));
+  }
+
+  return profile;
+}
 
 onMounted(() => {
   window.setInterval(list, 3000);

@@ -1,5 +1,5 @@
 <template>
-  <div class="header" >
+  <div class="header">
     <Header @run="runPattern" @stop="stopPattern" />
   </div>
 
@@ -13,20 +13,29 @@ import Header from "./components/Header.vue";
 import { RouterView } from "vue-router";
 import { ref } from "vue";
 import { invoke } from "@tauri-apps/api";
-import { useGridStore } from "./store";
+import { PatternType, useGridStore } from "./store";
 
 const homePage = ref();
 
 function runPattern(): void {
   const grid = useGridStore();
-  console.log(grid);
 
-  // map grid by taking only the value attribute
-  const gridValue = grid.grid.map((row) => row.value);
+  if (grid.usePatternType === PatternType.Static) {
+    // map grid by taking only the value attribute
+    const gridValue = grid.grid.map((row) => row.value);
 
-  invoke("run_pattern", { port: grid.port, gridValue: gridValue }).then((p: any) => {
-    console.log(p);
-  });
+    invoke("run_pattern", { port: grid.port, gridValue: gridValue }).then((p: any) => {
+      console.log(p);
+    });
+  } else {
+    invoke("run_pattern", {
+      port: grid.port,
+      gridValue: null,
+      profiles: grid.pattern.profiles,
+    }).then((p: any) => {
+      console.log(p);
+    });
+  }
 }
 
 function stopPattern(): void {

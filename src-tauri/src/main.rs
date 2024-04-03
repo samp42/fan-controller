@@ -9,10 +9,10 @@ use std::{
 use serde::{Deserialize, Serialize};
 use tauri::Manager;
 
-#[derive(Deserialize)]
+#[derive(Debug, Deserialize)]
 struct InstantProfile {
     pub fans: Vec<u8>,
-    pub delta_t: u8, // ms
+    pub dt: u8, // ms
 }
 
 struct PatternArc {
@@ -89,9 +89,12 @@ fn run_pattern(
     app: tauri::AppHandle,
     port: String,
     grid_value: Option<Vec<u8>>,
-    profile: Option<InstantProfile>,
+    profiles: Option<Vec<InstantProfile>>,
 ) {
     let cloned_app = app.clone();
+
+    println!("{:?}", grid_value);
+    println!("{:?}", profiles);
 
     std::thread::spawn(move || {
         let state = cloned_app.state::<PatternArc>();
@@ -104,7 +107,7 @@ fn run_pattern(
         drop(run);
 
         let cloned_port = port.clone();
-        let duration = Duration::from_secs(1);
+        let mut duration = Duration::from_secs(1);
 
         loop {
             let state = cloned_app.state::<PatternArc>();
@@ -115,11 +118,21 @@ fn run_pattern(
 
                 match grid_value {
                     Some(ref grid) => {
+                        println!("Running grid");
                         set_grid_to_speed(&cloned_port, &grid);
                     },
-                    None => match profile {
-                        Some(ref profile) => {}
+                    None => match profiles {
+                        Some(ref profiles) => {
+                            println!("Running profile");
+                            duration = Duration::from_millis(1);
+
+                            for profile in profiles {
+                                set_grid_to_speed(&cloned_port, &profile.fans);
+                                std::thread::sleep(Duration::from_millis(profile.dt as u64));
+                            }
+                        }
                         None => {
+                            println!("No grid or profile provided, stopping pattern");
                             *running = false;
                         }
                     },
