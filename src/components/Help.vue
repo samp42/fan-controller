@@ -1,34 +1,51 @@
 <script setup lang="ts">
-    import BackButton from "./BackButton.vue";
+import BackButton from "./BackButton.vue";
 </script>
 
 <template>
-    <div>
-        <!-- <RouterLink to="/" class="back-link"> -->
-            <!-- <img src="../assets/chevron-left.svg" alt="Back" /> -->
-            <!-- <p>Back</p> -->
-        <!-- </RouterLink> -->
-        <BackButton class="back-button"></BackButton>
-        <h1>Help</h1>
-        <div class="help-content-container">
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur blandit velit ac turpis luctus accumsan. Mauris eget pharetra sem. Nunc vel vehicula nulla. Phasellus fringilla accumsan nibh, nec porta nisl sagittis eget. Curabitur consectetur suscipit diam et condimentum. Nam sed nulla ac felis faucibus convallis a in nunc. Maecenas pulvinar hendrerit magna vel placerat.
-
-Curabitur sit amet rhoncus orci, a commodo erat. Donec interdum libero nec purus viverra euismod scelerisque et ligula. In elementum rutrum massa vel viverra. Nam gravida felis dui, a fermentum justo lacinia nec. Nulla eu magna commodo, imperdiet nisi sed, fringilla velit. Mauris vitae dictum felis. Donec hendrerit magna in nibh finibus, sed ultricies magna semper. Nam iaculis ut elit quis eleifend. Nunc elementum ullamcorper tristique. Mauris neque nulla, commodo sit amet nulla sed, scelerisque congue sapien. Donec pharetra metus eu felis mollis iaculis. Praesent rhoncus, justo ac placerat convallis, turpis purus condimentum neque, ut laoreet neque neque non ligula. Aliquam faucibus porta fringilla. Suspendisse gravida, massa iaculis sodales varius, quam dolor lobortis elit, mollis rutrum mauris augue eget est. In auctor augue a pulvinar varius.
-
-Phasellus et nulla id dolor finibus pretium. Quisque dignissim dictum erat sit amet vestibulum. Aenean sed nisl id justo sollicitudin sodales. Interdum et malesuada fames ac ante ipsum primis in faucibus. Donec arcu quam, pellentesque sit amet arcu scelerisque, blandit ultrices odio. Duis eu sodales ligula. Maecenas porttitor tincidunt magna, eget tempor lectus cursus vel.
-
-Etiam finibus fringilla imperdiet. Aliquam vel quam accumsan ex consequat egestas. Donec sit amet metus varius, euismod dolor nec, dapibus dui. Ut porttitor, erat sed ultrices tristique, arcu enim malesuada ipsum, nec posuere massa quam vel ante. Nulla tristique faucibus lectus in vulputate. Nunc id tincidunt purus. Donec quis scelerisque orci, in pellentesque sapien. Ut ut tortor ac magna accumsan lobortis. Etiam ultricies a massa sed convallis. Integer maximus blandit egestas. Curabitur mattis eros nulla, at sodales urna blandit vel. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae;
-
-Sed enim tortor, ultricies quis felis at, rhoncus bibendum ligula. Praesent finibus lectus in nibh dapibus hendrerit. Sed ut elementum turpis, pellentesque scelerisque massa. Aenean sit amet dictum arcu, ac tincidunt neque. Curabitur egestas vel enim sit amet vulputate. Nullam efficitur eleifend magna eu dapibus. Aenean at efficitur tortor.
-        </p>
+  <div>
+    <!-- <RouterLink to="/" class="back-link"> -->
+    <!-- <img src="../assets/chevron-left.svg" alt="Back" /> -->
+    <!-- <p>Back</p> -->
+    <!-- </RouterLink> -->
+    <BackButton class="back-button"></BackButton>
+    <h1>Help</h1>
+    <div class="help-content-container">
+      <h2>Running a pattern</h2>
+      <p>
+        To run a pattern, either a dynamic (CSV) pattern or a static pattern and a port
+        must be selected. This section explains how to do both. Once a pattern and a port
+        have been selected, you can click on the play button in the header to run the
+        pattern. The pattern will run in a loop. To stop the pattern, click on the stop
+        button in the header. It may take a few seconds between the time you click on the
+        stop button and the time the pattern actually stops running. To restart the
+        pattern, simply click on the play button again and the pattern will start from the
+        beginning.
+      </p>
+      <h3>Selecting a port</h3>
+      <p>
+        To select a port, you can use the dropdown in the header. It may take up to 3
+        seconds to see a new device connected to a port to appear in the options. If the
+        dropdown is blank, it means that no port has been selected. If you see the pacman,
+        it means that it is loading the available ports or no port is available.
+      </p>
+      <h3>Selecting a pattern</h3>
+      <h4>Static pattern</h4>
+      <p>
+        To select a static pattern, go into the Patterns page by clicking on the link in
+        the header. Then, choose the desired pattern. You will be redirected to the home
+        page with the grid. You will then be able to select different paramters of the
+        patterns like the size and the speed.
+      </p>
+      <h4>Dynamic pattern</h4>
+      <p>To select a dynamic pattern, simply choose a CSV file from the header.</p>
     </div>
-        
-    </div>
+  </div>
 </template>
 
 <style>
 .help-content-container {
-    margin: 0 48px;
-    text-align: justify;
+  margin: 0 48px;
+  text-align: justify;
 }
 </style>

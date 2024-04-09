@@ -20,13 +20,8 @@
       <!-- <button class="refresh-button action-button" @click="list">
         <img src="../assets/arrow-clockwise.svg" alt="refresh" class="img-icon"/>
       </button> -->
-      <Select :select-options="ports"></Select>
-      <!-- <img
-        src="../assets/loader.svg"
-        alt="refresh"
-        class="refresh-button"
-        style="height: 50px"
-      /> -->
+      <Select :select-options="ports" v-if="ports.length !== 0"></Select>
+      <img v-else src="../assets/loader.svg" alt="loader" style="height: 50px" />
     </div>
   </div>
 </template>
