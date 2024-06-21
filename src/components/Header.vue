@@ -39,15 +39,16 @@ const ports = ref([]);
 function list(): void {
   invoke("list_serial_ports").then((p: any) => {
     ports.value = p;
+    console.log(p)
   });
 }
 
-function time(): void {
-  const store = useGridStore();
-  invoke("get_timing", { port: store.port }).then((p: any) => {
-    console.log(p);
-  });
-}
+// function time(): void {
+//   const store = useGridStore();
+//   invoke("get_timing", { port: store.port }).then((p: any) => {
+//     console.log(p);
+//   });
+// }
 
 function handleFileUpload(event: any) {
   const file = event.target.files[0];
