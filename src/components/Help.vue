@@ -27,7 +27,8 @@ import BackButton from "./BackButton.vue";
         To select a port, you can use the dropdown in the header. It may take up to 3
         seconds to see a new device connected to a port to appear in the options. If the
         dropdown is blank, it means that no port has been selected. If you see the pacman,
-        it means that it is loading the available ports or no port is available.
+        it means that it is loading the available ports or no port is available. The name
+        of the port should be "/dev/cu.usbmodem149464201".
       </p>
       <h3>Selecting a pattern</h3>
       <h4>Static pattern</h4>

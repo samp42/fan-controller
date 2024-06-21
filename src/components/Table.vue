@@ -145,20 +145,21 @@ export default {
       grid: [] as { value: number; disabled: boolean }[],
     };
   },
-  watch: {
-    grid(newValue) {
-      const gridStore = useGridStore();
-      gridStore.grid = newValue;
-      gridStore.usePatternType = PatternType.Static;
-      console.log(newValue);
-    },
-  },
-  mounted() {
-    console.log(this.grid);
-  },
-  onUpdated() {
-    console.log(this.grid);
-  },
+  // watch: {
+  //   grid(newValue) {
+  //     const gridStore = useGridStore();
+  //     gridStore.grid = newValue.map((cell: any) => ({
+  //       value: parseInt(cell.value),
+  //       disabled: cell.disabled,
+  //     }));
+  //     gridStore.usePatternType = PatternType.Static;
+  //     console.log(newValue);
+  //   },
+  // },
+  // onUpdated() {
+  //   console.log("updated");
+  //   console.log(this.grid);
+  // },
   created() {
     const route = this.$route as RouteLocationNormalizedLoaded;
     this.patternName = route.query.pattern as string;
@@ -507,13 +508,24 @@ export default {
       }
     },
     checkInput(row: number, col: number) {
+      const gridStore = useGridStore();
+
       const index = 9 * (row - 1) + col - 1;
       const inputValue = this.grid[index].value;
 
-      if (isNaN(inputValue) || inputValue < 0 || inputValue > 100) {
+      console.log(inputValue + typeof inputValue);
+
+      if (
+        typeof inputValue === "string" ||
+        isNaN(inputValue) ||
+        inputValue < 0 ||
+        inputValue > 100
+      ) {
         const numOnly = parseInt(inputValue.toString().replace(/[^0-9]/g, ""));
 
         this.grid[index] = { ...this.grid[index], value: numOnly, disabled: false };
+        gridStore.usePatternType = PatternType.Static;
+        gridStore.grid = this.grid;
       }
     },
   },

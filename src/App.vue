@@ -40,7 +40,7 @@ function runPattern(): void {
 
 function stopPattern(): void {
   const grid = useGridStore();
-  console.log("stop");
+
   invoke("stop_pattern", { port: grid.port }).then((p: any) => {
     console.log(p);
   });

@@ -171,7 +171,6 @@ fn get_timing(_state: tauri::State<PatternArc>, port: String) {
     let duration = 50;
     let step_delay = duration / 40;
 
-    // let mut run = state.run.lock().unwrap();
 
     let mut port = serialport::new(port, 115200)
         .timeout(std::time::Duration::from_millis(1))

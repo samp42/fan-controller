@@ -17,7 +17,7 @@
       <button class="stop-button action-button" @click="$emit('stop')">
         <img src="../assets/stop.svg" alt="stop" class="img-icon" />
       </button>
-      <button @click="time()">Time</button>
+      <!-- <button @click="time()">Time</button> -->
       <!-- <button class="refresh-button action-button" @click="list">
         <img src="../assets/arrow-clockwise.svg" alt="refresh" class="img-icon"/>
       </button> -->
