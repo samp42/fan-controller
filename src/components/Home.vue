@@ -1,11 +1,11 @@
 <template>
   <div style="overflow-x: auto">
     <div class="center">
-      <Table class="table"></Table>
+      <TableNew class="table"></TableNew>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import Table from "./Table.vue";
+import TableNew from "./TableNew.vue";
 </script>

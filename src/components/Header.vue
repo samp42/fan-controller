@@ -39,7 +39,6 @@ const ports = ref([]);
 function list(): void {
   invoke("list_serial_ports").then((p: any) => {
     ports.value = p;
-    console.log(p)
   });
 }
 
