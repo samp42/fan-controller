@@ -4,18 +4,18 @@
   </div>
 
   <div class="app-content" style="overflow: hidden">
-    <RouterView ref="homePage"></RouterView>
+    <RouterView ></RouterView>
   </div>
 </template>
 
 <script setup lang="ts">
 import Header from "./components/Header.vue";
 import { RouterView } from "vue-router";
-import { ref } from "vue";
+// import { ref } from "vue";
 import { invoke } from "@tauri-apps/api";
 import { PatternType, useGridStore } from "./store";
 
-const homePage = ref();
+// const homePage = ref();
 
 function runPattern(): void {
   const grid = useGridStore();

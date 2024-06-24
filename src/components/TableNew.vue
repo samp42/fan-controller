@@ -1,127 +1,110 @@
 <template>
-  <br />
-  <input
-    class="pattern"
-    id="pattern"
-    type="text"
-    :value="patternName"
-    placeholder="Pattern Name"
-  />
-  <div class="layout" style="overflow: hidden">
-    <div class="square">
-      <div class="content">
-        <table id="table" class="table" aria-describedby="fan inputs" ref="table">
-          <th></th>
-          <tbody>
-            <tr v-for="row in 9" :key="row">
-              <td v-for="col in 9" :key="col">
-                <input
-                  type="text"
-                  :ref="`r${row}c${col}`"
-                  :id="`r${row}c${col}`"
-                  v-model="grid[9 * (row - 1) + col - 1].value"
-                  :class="getColor(row, col)"
-                  style="overflow: visible"
-                  :disabled="false"
-                  @input="checkInput(row, col)"
-                />
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+    <div>
+        <br />
+        <input class="pattern" id="pattern" type="text" :value="patternName" placeholder="Pattern Name" />
+        <div class="layout" style="overflow: hidden">
+            <div class="square">
+                <div class="content">
+                    <table id="table" class="table" aria-describedby="fan inputs" ref="table">
+                        <th></th>
+                        <tbody>
+                            <tr v-for="row in 9" :key="row">
+                                <td v-for="col in 9" :key="col">
+                                    <input type="text" :ref="`r${row}c${col}`" :id="`r${row}c${col}`"
+                                        v-model="grid[9 * (row - 1) + col - 1].value" :class="getColor(row, col)"
+                                        style="overflow: visible" :disabled="false" @input="checkInput(row, col)" />
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <span class="br"></span>
+        <div v-if="patternName === 'checkerboard' || patternName === 'Checkerboard'">
+            <label for="size">Size:</label>
+            <input class="patternInput" type="text" id="size" />
+            <label for="speed"> Speed:</label>
+            <input class="patternInput" type="text" id="speed" />
+            <input class="checkbox" type="checkbox" id="check" />
+            <label for="check">Reverse</label>
+        </div>
+
+        <div v-else-if="patternName === 'Alternate rows' ||
+            patternName === 'alternate rows' ||
+            patternName === 'Alternate columns' ||
+            patternName === 'alternate columns'
+            ">
+            <label for="size">Size:</label>
+            <input class="patternInput" type="text" id="size" />
+            <label for="speed"> Speed:</label>
+            <input class="patternInput" type="text" id="speed" />
+            <input class="checkbox" type="checkbox" id="reverseAlt" />
+            <label for="reverseAlt">Reverse</label>
+        </div>
+        <div v-else-if="patternName === 'Row on' ||
+            patternName === 'row on' ||
+            patternName === 'Row off' ||
+            patternName === 'row off' ||
+            patternName === 'Column on' ||
+            patternName === 'column on' ||
+            patternName === 'Column off' ||
+            patternName === 'column off'
+            ">
+            <label for="size">Position:</label>
+            <input class="patternInput" type="text" id="size" />
+            <label for="speed"> Speed:</label>
+            <input class="patternInput" type="text" id="speed" />
+            <input class="checkbox" type="checkbox" id="rowOnOff" />
+            <label for="rowOnOff">On/Off</label>
+        </div>
+        <div v-else-if="patternName === 'gradient' || patternName === 'Gradient'">
+            <label for="min">Minimum:</label>
+            <input class="patternInput" type="text" id="min" />
+            <label for="max"> Maximum:</label>
+            <input class="patternInput" type="text" id="max" />
+            <input class="checkbox" type="checkbox" id="rowCol" />
+            <label for="rowCol">Row:</label>
+            <input class="checkbox" type="checkbox" id="gradientReverse" />
+            <label for="gradientReverse">Reverse:</label>
+        </div>
+
+        <div v-else-if="patternName === 'random' || patternName === 'Random'"></div>
+        <div v-else-if="patternName === 'Middle off' || patternName === 'middle off'">
+            <label for="speed">Speed:</label>
+            <input class="patternInput" type="text" id="speed" />
+            <input class="checkbox" type="checkbox" id="middleOnOff" />
+            <label for="middleOnOff">On/Off</label>
+        </div>
+        <div v-else-if="patternName === 'Middle on' || patternName === 'middle on'">
+            <label for="speed">Speed:</label>
+            <input class="patternInput" type="text" id="speed" required />
+            <input class="checkbox" type="checkbox" id="middleOnOff" checked />
+            <label for="middleOnOff">On/Off</label>
+        </div>
+
+        <div v-else-if="patternName === 'grid' || patternName === 'Grid'">
+            <label for="size">Size:</label>
+            <input class="patternInput" type="text" id="size" />
+            <label for="speed"> Speed:</label>
+            <input class="patternInput" type="text" id="speed" />
+            <input class="checkbox" type="checkbox" id="grid" />
+            <label for="grid">Reverse</label>
+        </div>
+        <div v-else-if="patternName === 'gaussian' || patternName === 'Gaussian'">
+            <label for="mean">Mean:</label>
+            <input class="patternInput" type="text" id="mean" />
+            <label for="sigma"> Sigma:</label>
+            <input class="patternInput" type="text" id="sigma" />
+        </div>
+        <span class="br"></span>
+        <div class="button-container">
+            <button type="button" @click="clear()">Clear</button>
+            <!-- <button type="button" @click="getPattern()">Enter</button> -->
+            <p id="p" class="err" style="color: red; font-weight: bold"></p>
+        </div>
+        <span class="br"></span>
     </div>
-  </div>
-  <span class="br"></span>
-  <div v-if="patternName === 'checkerboard' || patternName === 'Checkerboard'">
-    <label for="size">Size:</label>
-    <input class="patternInput" type="text" id="size" />
-    <label for="speed"> Speed:</label>
-    <input class="patternInput" type="text" id="speed" />
-    <input class="checkbox" type="checkbox" id="check" />
-    <label for="check">Reverse</label>
-  </div>
-
-  <div
-    v-else-if="
-      patternName === 'Alternate rows' ||
-      patternName === 'alternate rows' ||
-      patternName === 'Alternate columns' ||
-      patternName === 'alternate columns'
-    "
-  >
-    <label for="size">Size:</label>
-    <input class="patternInput" type="text" id="size" />
-    <label for="speed"> Speed:</label>
-    <input class="patternInput" type="text" id="speed" />
-    <input class="checkbox" type="checkbox" id="reverseAlt" />
-    <label for="reverseAlt">Reverse</label>
-  </div>
-  <div
-    v-else-if="
-      patternName === 'Row on' ||
-      patternName === 'row on' ||
-      patternName === 'Row off' ||
-      patternName === 'row off' ||
-      patternName === 'Column on' ||
-      patternName === 'column on' ||
-      patternName === 'Column off' ||
-      patternName === 'column off'
-    "
-  >
-    <label for="size">Position:</label>
-    <input class="patternInput" type="text" id="size" />
-    <label for="speed"> Speed:</label>
-    <input class="patternInput" type="text" id="speed" />
-    <input class="checkbox" type="checkbox" id="rowOnOff" />
-    <label for="rowOnOff">On/Off</label>
-  </div>
-  <div v-else-if="patternName === 'gradient' || patternName === 'Gradient'">
-    <label for="min">Minimum:</label>
-    <input class="patternInput" type="text" id="min" />
-    <label for="max"> Maximum:</label>
-    <input class="patternInput" type="text" id="max" />
-    <input class="checkbox" type="checkbox" id="rowCol" />
-    <label for="rowCol">Row:</label>
-    <input class="checkbox" type="checkbox" id="gradientReverse" />
-    <label for="gradientReverse">Reverse:</label>
-  </div>
-
-  <div v-else-if="patternName === 'random' || patternName === 'Random'"></div>
-  <div v-else-if="patternName === 'Middle off' || patternName === 'middle off'">
-    <label for="speed">Speed:</label>
-    <input class="patternInput" type="text" id="speed" />
-    <input class="checkbox" type="checkbox" id="middleOnOff" />
-    <label for="middleOnOff">On/Off</label>
-  </div>
-  <div v-else-if="patternName === 'Middle on' || patternName === 'middle on'">
-    <label for="speed">Speed:</label>
-    <input class="patternInput" type="text" id="speed" required />
-    <input class="checkbox" type="checkbox" id="middleOnOff" checked />
-    <label for="middleOnOff">On/Off</label>
-  </div>
-
-  <div v-else-if="patternName === 'grid' || patternName === 'Grid'">
-    <label for="size">Size:</label>
-    <input class="patternInput" type="text" id="size" />
-    <label for="speed"> Speed:</label>
-    <input class="patternInput" type="text" id="speed" />
-    <input class="checkbox" type="checkbox" id="grid" />
-    <label for="grid">Reverse</label>
-  </div>
-  <div v-else-if="patternName === 'gaussian' || patternName === 'Gaussian'">
-    <label for="mean">Mean:</label>
-    <input class="patternInput" type="text" id="mean" />
-    <label for="sigma"> Sigma:</label>
-    <input class="patternInput" type="text" id="sigma" />
-  </div>
-  <span class="br"></span>
-  <div class="button-container">
-    <button type="button" @click="clear()">Clear</button>
-    <!-- <button type="button" @click="getPattern()">Enter</button> -->
-    <p id="p" class="err" style="color: red; font-weight: bold"></p>
-  </div>
-  <span class="br"></span>
 </template>
 
 <script setup lang="ts">
@@ -134,64 +117,62 @@ import { initEmptyGrid } from "../patterns";
 const route = useRoute();
 let gridStore = useGridStore();
 
-console.log(route.params.patternName);
+console.log(route.query.pattern);
 
-let patternName = ref<string>("");
-let grid = ref<Cell[]>([]);
+let patternName = ref<string>(route.query.pattern as string || "");
+let grid = ref<Cell[]>(initEmptyGrid());
 let errorMessage = ref<string>("");
 
 function getColor(row: number, column: number) {
-  const gridValue = grid.value[9 * (row - 1) + column - 1];
+    const gridValue = grid.value[9 * (row - 1) + column - 1];
 
-  // check if gridValue contains only numbers
-  if (isNaN(gridValue.value)) {
-    return "";
-  }
-  const value = gridValue.value;
+    // check if gridValue contains only numbers
+    if (isNaN(gridValue.value)) {
+        return "";
+    }
+    const value = gridValue.value;
 
-  if (value == 0) {
-    return "white";
-  } else if (value < 0 || value > 100) {
-    return "red";
-  } else if (value > 0 && value <= 15) {
-    return "lightBlue";
-  } else if (value > 15 && value <= 30) {
-    return "blue";
-  } else if (value > 30 && value <= 45) {
-    return "darkBlue";
-  } else if (value > 45 && value <= 60) {
-    return "darkPurple";
-  } else if (value > 60 && value <= 75) {
-    return "purple";
-  } else if (value > 75 && value <= 90) {
-    return "darkPink";
-  }
-  return "pink";
+    if (value == 0) {
+        return "white";
+    } else if (value < 0 || value > 100) {
+        return "red";
+    } else if (value > 0 && value <= 15) {
+        return "lightBlue";
+    } else if (value > 15 && value <= 30) {
+        return "blue";
+    } else if (value > 30 && value <= 45) {
+        return "darkBlue";
+    } else if (value > 45 && value <= 60) {
+        return "darkPurple";
+    } else if (value > 60 && value <= 75) {
+        return "purple";
+    } else if (value > 75 && value <= 90) {
+        return "darkPink";
+    }
+    return "pink";
 }
 
 function checkInput(row: number, col: number) {
-  const index = 9 * (row - 1) + col - 1;
-  const inputValue = grid.value[index].value;
+    const index = 9 * (row - 1) + col - 1;
+    const inputValue = grid.value[index].value;
 
-  console.log(inputValue + typeof inputValue);
+    if (
+        typeof inputValue === "string" ||
+        isNaN(inputValue) ||
+        inputValue < 0 ||
+        inputValue > 100
+    ) {
+        const numOnly = parseInt(inputValue.toString().replace(/[^0-9]/g, "")) | 0;
 
-  if (
-    typeof inputValue === "string" ||
-    isNaN(inputValue) ||
-    inputValue < 0 ||
-    inputValue > 100
-  ) {
-    const numOnly = parseInt(inputValue.toString().replace(/[^0-9]/g, ""));
-
-    grid.value[index] = { ...grid.value[index], value: numOnly, disabled: false };
-    gridStore.usePatternType = PatternType.Static;
-    gridStore.grid = grid.value;
-  }
+        grid.value[index] = { ...grid.value[index], value: numOnly, disabled: false };
+        gridStore.usePatternType = PatternType.Static;
+        gridStore.grid = grid.value;
+    }
 }
 
 function clear() {
-  grid.value = initEmptyGrid();
-  errorMessage.value = "";
+    grid.value = initEmptyGrid();
+    errorMessage.value = "";
 }
 
 // onMounted(() => {
@@ -386,144 +367,144 @@ function clear() {
 
 <style scoped>
 * {
-  box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 .br {
-  display: block;
-  margin-bottom: 0em;
+    display: block;
+    margin-bottom: 0em;
 }
 
 .layout {
-  position: relative;
-  width: 100%;
+    position: relative;
+    width: 100%;
 }
 
 .square {
-  padding-bottom: 85%;
+    padding-bottom: 85%;
 }
 
 .content {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
 }
 
 .button-container {
-  position: relative;
+    position: relative;
 }
 
 .err {
-  position: absolute;
-  top: -10px;
-  right: 80px;
-  padding-bottom: 55px;
-  color: red;
-  font-weight: bold;
+    position: absolute;
+    top: -10px;
+    right: 80px;
+    padding-bottom: 55px;
+    color: red;
+    font-weight: bold;
 }
 
 input {
-  background-color: white;
-  border-radius: 0;
-  border: 0;
-  text-align: center;
-  box-shadow: none;
-  width: 100%;
-  height: 100%;
-  top: 50%;
-  left: 50%;
+    background-color: white;
+    border-radius: 0;
+    border: 0;
+    text-align: center;
+    box-shadow: none;
+    width: 100%;
+    height: 100%;
+    top: 50%;
+    left: 50%;
 }
 
 .checkbox {
-  vertical-align: middle;
-  width: 15px;
-  height: 15px;
-  padding-right: 100px;
+    vertical-align: middle;
+    width: 15px;
+    height: 15px;
+    padding-right: 100px;
 }
 
 table {
-  border: 1px solid black;
-  justify-content: center;
-  border-spacing: 0;
-  width: 100%;
-  height: 100%;
-  padding: 0;
+    border: 1px solid black;
+    justify-content: center;
+    border-spacing: 0;
+    width: 100%;
+    height: 100%;
+    padding: 0;
 }
 
 th {
-  display: none;
+    display: none;
 }
 
 tr {
-  border: 1px solid black;
+    border: 1px solid black;
 }
 
 td {
-  border: 1px solid black;
-  text-align: center;
-  padding: 0;
+    border: 1px solid black;
+    text-align: center;
+    padding: 0;
 }
 
 .pattern {
-  color: black;
-  background-color: #65656598;
-  border-radius: 8px;
-  border: 1px solid transparent;
-  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
-  font-weight: bold;
+    color: black;
+    background-color: #65656598;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
+    font-weight: bold;
 }
 
 .button {
-  justify-content: flex-end;
-  text-align: center;
+    justify-content: flex-end;
+    text-align: center;
 }
 
 .patternInput {
-  background-color: #f2f2f2;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  padding: 8px 12px;
-  margin-bottom: 10px;
-  font-size: 16px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  width: 100px;
+    background-color: #f2f2f2;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 8px 12px;
+    margin-bottom: 10px;
+    font-size: 16px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 100px;
 }
 
 .white {
-  background-color: rgb(255, 255, 255);
+    background-color: rgb(255, 255, 255);
 }
 
 .lightBlue {
-  background-color: rgba(28, 98, 249, 0.621);
+    background-color: rgba(28, 98, 249, 0.621);
 }
 
 .blue {
-  background-color: rgba(23, 58, 230, 0.687);
+    background-color: rgba(23, 58, 230, 0.687);
 }
 
 .darkBlue {
-  background-color: rgba(6, 31, 218, 0.696);
+    background-color: rgba(6, 31, 218, 0.696);
 }
 
 .darkPurple {
-  background-color: rgba(68, 1, 226, 0.676);
+    background-color: rgba(68, 1, 226, 0.676);
 }
 
 .purple {
-  background-color: rgba(130, 4, 255, 0.687);
+    background-color: rgba(130, 4, 255, 0.687);
 }
 
 .darkPink {
-  background-color: rgba(169, 2, 247, 0.644);
+    background-color: rgba(169, 2, 247, 0.644);
 }
 
 .pink {
-  background-color: rgba(227, 2, 247, 0.667);
+    background-color: rgba(227, 2, 247, 0.667);
 }
 
 .red {
-  background-color: rgba(213, 20, 20, 0.814);
+    background-color: rgba(213, 20, 20, 0.814);
 }
 </style>
