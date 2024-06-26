@@ -1,7 +1,8 @@
 <template>
     <div>
         <br />
-        <input class="pattern" id="pattern" type="text" :value="patternName" placeholder="Pattern Name" />
+        <input class="pattern" id="pattern" type="text" v-model="patternName" placeholder="Pattern Name"
+            @input="console.log(patternName)" />
         <div class="layout" style="overflow: hidden">
             <div class="square">
                 <div class="content">
@@ -10,9 +11,10 @@
                         <tbody>
                             <tr v-for="row in 9" :key="row">
                                 <td v-for="col in 9" :key="col">
-                                    <input type="text" :ref="`r${row}c${col}`" :id="`r${row}c${col}`"
-                                        v-model="grid[9 * (row - 1) + col - 1].value" :class="getColor(row, col)"
-                                        style="overflow: visible" :disabled="false" @input="checkInput(row, col)" />
+                                    <input type="number" min="0" max="100" :ref="`r${row}c${col}`"
+                                        :id="`r${row}c${col}`" v-model="grid[9 * (row - 1) + col - 1].value"
+                                        :class="getColor(row, col)" style="overflow: visible" :disabled="false"
+                                        @input="checkInput(row, col, $event.target)" />
                                 </td>
                             </tr>
                         </tbody>
@@ -21,7 +23,37 @@
             </div>
         </div>
         <span class="br"></span>
-        <div v-if="patternName === 'checkerboard' || patternName === 'Checkerboard'">
+        <div class="input-container">
+            <div v-if="displaySize()" class="input-inner">
+                <label for="size">Size:</label>
+                <input class="patternInput" type="number" id="size" min="1" max="9" v-model="size" />
+            </div>
+            <div v-if="displaySpeed()" class="input-inner">
+                <label for="speed"> Speed:</label>
+                <input class="patternInput" type="text" id="speed" v-model="speed" />
+            </div>
+            <div v-if="displayMinMax()" class="input-inner">
+                <label for="min">Minimum:</label>
+                <input class="patternInput" type="number" id="min" min="0" max="100" v-model="minimum" />
+                <label for="max"> Maximum:</label>
+                <input class="patternInput" type="text" id="max" min="0" max="100" v-model="maximum" />
+            </div>
+            <div v-if="displayReverse()" class="input-inner">
+                <input class="checkbox" type="checkbox" id="check" v-model="reverse" />
+                <label for="check">Reverse</label>
+            </div>
+            <div v-if="displayOnOff()" class="input-inner">
+                <input class="checkbox" type="checkbox" id="rowOnOff" />
+                <label for="rowOnOff">On/Off</label>
+            </div>
+            <div v-if="displayGaussian()" class="input-inner">
+                <label for="mean">Mean:</label>
+                <input class="patternInput" type="text" id="mean" v-model="mean" />
+                <label for="sigma"> Sigma:</label>
+                <input class="patternInput" type="text" id="sigma" v-model="sigma" />
+            </div>
+        </div>
+        <!-- <div v-if="patternName === 'checkerboard' || patternName === 'Checkerboard'">
             <label for="size">Size:</label>
             <input class="patternInput" type="text" id="size" />
             <label for="speed"> Speed:</label>
@@ -60,9 +92,9 @@
         </div>
         <div v-else-if="patternName === 'gradient' || patternName === 'Gradient'">
             <label for="min">Minimum:</label>
-            <input class="patternInput" type="text" id="min" />
+            <input class="patternInput" type="number" id="min" min="0" max="100" v-model="minimum"/>
             <label for="max"> Maximum:</label>
-            <input class="patternInput" type="text" id="max" />
+            <input class="patternInput" type="text" id="max" min="0" max="100" v-model="maximum"/>
             <input class="checkbox" type="checkbox" id="rowCol" />
             <label for="rowCol">Row:</label>
             <input class="checkbox" type="checkbox" id="gradientReverse" />
@@ -96,11 +128,11 @@
             <input class="patternInput" type="text" id="mean" />
             <label for="sigma"> Sigma:</label>
             <input class="patternInput" type="text" id="sigma" />
-        </div>
+        </div> -->
         <span class="br"></span>
         <div class="button-container">
             <button type="button" @click="clear()">Clear</button>
-            <!-- <button type="button" @click="getPattern()">Enter</button> -->
+            <button type="button" @click="getPatternFromList()">Enter</button>
             <p id="p" class="err" style="color: red; font-weight: bold"></p>
         </div>
         <span class="br"></span>
@@ -112,18 +144,65 @@ import { PatternType, useGridStore } from "../store";
 import { ref } from "vue";
 import { useRoute } from "vue-router";
 import { Cell } from "../cell";
-import { initEmptyGrid } from "../patterns";
+import { initEmptyGrid, checkerBoard, gaussian, gradient, randomFill } from "../patterns";
 
 const route = useRoute();
 let gridStore = useGridStore();
-
-console.log(route.query.pattern);
 
 let patternName = ref<string>(route.query.pattern as string || "");
 let grid = ref<Cell[]>(initEmptyGrid());
 let errorMessage = ref<string>("");
 
-function getColor(row: number, column: number) {
+// pattern parameters
+let minimum = ref<number>(0);
+let maximum = ref<number>(100);
+let size = ref<number>(1);
+let speed = ref<number>(0);
+let position = ref<number>(5);
+let mean = ref<number>(0);
+let sigma = ref<number>(0);
+let rowCol = ref<boolean>(false);
+let reverse = ref<boolean>(false);
+let middleOnOff = ref<boolean>(false);
+
+// functions
+function displayMinMax(): boolean {
+    return patternName.value.toLowerCase() === "gradient";
+}
+
+function displaySize(): boolean {
+    return patternName.value.toLowerCase() === "checkerboard";
+}
+
+function displayReverse(): boolean {
+    return patternName.value.toLowerCase() === "checkerboard";
+}
+
+function displaySpeed(): boolean {
+    const pattern = patternName.value.toLowerCase();
+
+    return pattern === "checkerboard" || pattern === "alternate rows" || pattern === "alternate columns" ||
+        pattern === "middle on" || pattern === "middle off" || pattern === "grid" || pattern === "row on" ||
+        pattern === "row off" || pattern === "row on" || pattern === "column on" || pattern === "column off";
+}
+
+function displayPosition(): boolean {
+    return true;
+}
+
+function displayRowCol(): boolean {
+    return true;
+}
+
+function displayOnOff(): boolean {
+    return patternName.value.toLowerCase() === "middle off" || patternName.value.toLowerCase() === "middle on";
+}
+
+function displayGaussian(): boolean {
+    return patternName.value.toLowerCase() === "gaussian";
+}
+
+function getColor(row: number, column: number): string {
     const gridValue = grid.value[9 * (row - 1) + column - 1];
 
     // check if gridValue contains only numbers
@@ -152,33 +231,70 @@ function getColor(row: number, column: number) {
     return "pink";
 }
 
-function checkInput(row: number, col: number) {
+function checkInput(row: number, col: number, target: any): void {
     const index = 9 * (row - 1) + col - 1;
-    const inputValue = grid.value[index].value;
 
-    if (
-        typeof inputValue === "string" ||
-        isNaN(inputValue) ||
-        inputValue < 0 ||
-        inputValue > 100
-    ) {
-        const numOnly = parseInt(inputValue.toString().replace(/[^0-9]/g, "")) | 0;
+    const tempGrid = grid.value;
+    tempGrid.at(index)!.value = target.value.replace(/[^0-9]/g, ''); // Remove non-numeric characters
 
-        grid.value[index] = { ...grid.value[index], value: numOnly, disabled: false };
-        gridStore.usePatternType = PatternType.Static;
-        gridStore.grid = grid.value;
-    }
+    grid.value = tempGrid;
+
+    // grid.value[index].value = target.value;
+    // const inputValue = grid.value[index].value;
+
+    // const num = parseInt(`${inputValue}`) | 0;
+
+    // if (
+    //     typeof inputValue === "string" ||
+    //     isNaN(inputValue) ||
+    //     inputValue < 0 ||
+    //     inputValue > 100
+    // ) {
+    //     const numOnly = parseInt(inputValue.toString().replace(/[^0-9]/g, "")) | 0;
+
+    //     grid.value[index] = { ...grid.value[index], value: numOnly, disabled: false };
+    //     gridStore.usePatternType = PatternType.Static;
+    //     gridStore.grid = grid.value;
+    // }
+
+    grid.value[index].value
+    gridStore.grid = grid.value;
 }
 
-function clear() {
+function clear(): void {
     grid.value = initEmptyGrid();
     errorMessage.value = "";
 }
 
-// onMounted(() => {
-//   this.patternName = route.params.patternName;
-//   this.grid = this.getPattern(this.patternName);
-// });
+function getPatternFromList(): void {
+    switch (patternName.value.toLowerCase()) {
+        case "random":
+            grid.value = randomFill();
+            break;
+        case "gradient":
+            grid.value = gradient(minimum.value, maximum.value, rowCol.value, reverse.value);
+            break;
+        case "alternate rows":
+            break;
+        case "row on":
+            break;
+        case "column on":
+            break;
+        case "column off":
+            break;
+        case "middle on":
+            break;
+        case "middle off":
+            break;
+        case "grid":
+            break;
+        case "checkerboard":
+            grid.value = checkerBoard(size.value, speed.value, reverse.value);
+            break;
+        case "gaussian":
+            grid.value = gaussian(mean.value, sigma.value);
+    }
+}
 
 // getPattern() {
 //     var input = (<HTMLInputElement>(
@@ -368,6 +484,29 @@ function clear() {
 <style scoped>
 * {
     box-sizing: border-box;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+    -moz-appearance: textfield;
+}
+
+.input-container {
+    display: flex;
+    flex: 1;
+    justify-content: center;
+    align-items: center
+}
+
+.input-inner {
+    margin: 4px 4px 0;
 }
 
 .br {

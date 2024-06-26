@@ -19,7 +19,7 @@ export function randomFill(): Cell[] {
     return grid;
 }
 
-export function checkerBoard(size: number, val: number, rev: boolean): Cell[] {
+export function checkerBoard(size: number, speed: number, rev: boolean): Cell[] {
     let grid: Cell[] = initEmptyGrid();
 
     for (let i = 0; i < 9; i++) {
@@ -30,7 +30,7 @@ export function checkerBoard(size: number, val: number, rev: boolean): Cell[] {
             const isEvenSquare = (isEvenRow && isEvenCol) || (!isEvenRow && !isEvenCol);
 
             grid[9 * i + j] = {
-                value: isEvenSquare ? (rev ? val : 0) : rev ? 0 : val,
+                value: isEvenSquare ? (rev ? speed : 0) : rev ? 0 : speed,
                 disabled: isEvenSquare,
             };
         }
