@@ -144,7 +144,7 @@ import { PatternType, useGridStore } from "../store";
 import { ref } from "vue";
 import { useRoute } from "vue-router";
 import { Cell } from "../cell";
-import { initEmptyGrid, checkerBoard, gaussian, gradient, randomFill } from "../patterns";
+import { initEmptyGrid, altCols, altRows, checkerBoard, gaussian, gradient, gridPattern, middle, randomFill, singleCol, singleRow } from "../patterns";
 
 const route = useRoute();
 let gridStore = useGridStore();
@@ -163,7 +163,6 @@ let mean = ref<number>(0);
 let sigma = ref<number>(0);
 let rowCol = ref<boolean>(false);
 let reverse = ref<boolean>(false);
-let middleOnOff = ref<boolean>(false);
 
 // functions
 function displayMinMax(): boolean {
@@ -175,7 +174,9 @@ function displaySize(): boolean {
 }
 
 function displayReverse(): boolean {
-    return patternName.value.toLowerCase() === "checkerboard";
+    return patternName.value.toLowerCase() === "checkerboard" || patternName.value.toLowerCase() === "alternate rows" ||
+        patternName.value.toLowerCase() === "alternate columns" || patternName.value.toLowerCase() === "single row" ||
+        patternName.value.toLowerCase() === "single column";
 }
 
 function displaySpeed(): boolean {
@@ -192,10 +193,6 @@ function displayPosition(): boolean {
 
 function displayRowCol(): boolean {
     return true;
-}
-
-function displayOnOff(): boolean {
-    return patternName.value.toLowerCase() === "middle off" || patternName.value.toLowerCase() === "middle on";
 }
 
 function displayGaussian(): boolean {
@@ -275,18 +272,31 @@ function getPatternFromList(): void {
             grid.value = gradient(minimum.value, maximum.value, rowCol.value, reverse.value);
             break;
         case "alternate rows":
+            grid.value = altRows(size.value, speed.value, reverse.value);
+            break;
+        case "alternate columns":
+            grid.value = altCols(size.value, speed.value, reverse.value);
             break;
         case "row on":
+            grid.value = singleRow(size.value, speed.value, reverse.value)
+            break;
+        case "row off":
+            grid.value = singleRow(size.value, speed.value, reverse.value);
             break;
         case "column on":
+            grid.value = singleCol(size.value, speed.value, reverse.value);
             break;
         case "column off":
+            grid.value = singleCol(size.value, speed.value, reverse.value);
             break;
         case "middle on":
+            grid.value = middle(speed.value, true);
             break;
         case "middle off":
+            grid.value = middle(speed.value, false);
             break;
         case "grid":
+            grid.value = gridPattern(speed.value, size.value, size.value, reverse.value);
             break;
         case "checkerboard":
             grid.value = checkerBoard(size.value, speed.value, reverse.value);

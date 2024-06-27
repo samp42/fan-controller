@@ -39,17 +39,17 @@ export function checkerBoard(size: number, speed: number, rev: boolean): Cell[] 
     return grid;
 }
 
-export function singleRow(row: number, val: number, on: boolean): Cell[] {
+export function singleRow(row: number, speed: number, on: boolean): Cell[] {
     let grid: Cell[] = initEmptyGrid();
 
     return grid.map((cell, index) => ({
         value: on
             ? Math.floor(index / 9) + 1 === row
-                ? val
+                ? speed
                 : 0
             : Math.floor(index / 9) + 1 === row
                 ? 0
-                : val,
+                : speed,
         disabled: cell.disabled,
     }));
 }
@@ -63,36 +63,36 @@ export function singleCol(col: number, val: number, on: boolean): Cell[] {
     }));
 }
 
-export function altRows(lines: number, val: number, on: boolean): Cell[] {
+export function altRows(lines: number, speed: number, on: boolean): Cell[] {
     let grid: Cell[] = initEmptyGrid();
 
     return grid.map((cell, index) => ({
-        value: Math.floor(index / 9 / lines) % 2 === (on ? 0 : 1) ? val : 0,
+        value: Math.floor(index / 9 / lines) % 2 === (on ? 0 : 1) ? speed : 0,
         disabled: cell.disabled,
     }));
 }
 
-export function altCols(cols: number, val: number, on: boolean): Cell[] {
+export function altCols(cols: number, speed: number, on: boolean): Cell[] {
     let grid: Cell[] = initEmptyGrid();
 
     return grid.map((cell, index) => ({
-        value: Math.floor((index % 9) / cols) % 2 === (on ? 0 : 1) ? val : 0,
+        value: Math.floor((index % 9) / cols) % 2 === (on ? 0 : 1) ? speed : 0,
         disabled: cell.disabled,
     }));
 }
 
-export function middle(val: number, on: boolean): Cell[] {
+export function middle(speed: number, on: boolean): Cell[] {
     let grid: Cell[] = initEmptyGrid();
 
     const middleIndex = 40; // Index of the middle cell in a 9x9 grid
     if (on) {
         grid = grid.map((cell, index) => ({
-            value: index === middleIndex ? val : 0,
+            value: index === middleIndex ? speed : 0,
             disabled: cell.disabled,
         }));
     } else {
         grid = grid.map((cell, index) => ({
-            value: index === middleIndex ? 0 : val,
+            value: index === middleIndex ? 0 : speed,
             disabled: cell.disabled,
         }));
     }
@@ -100,7 +100,7 @@ export function middle(val: number, on: boolean): Cell[] {
     return grid;
 }
 
-export function gridPattern(val: number, lines: number, cols: number, on: boolean): Cell[] {
+export function gridPattern(speed: number, lines: number, cols: number, on: boolean): Cell[] {
     let grid: Cell[] = initEmptyGrid();
 
     return grid.map((cell, index) => {
@@ -110,7 +110,7 @@ export function gridPattern(val: number, lines: number, cols: number, on: boolea
         const isAltRow = Math.floor(row / lines) % 2 === (on ? 0 : 1);
         const isAltCol = Math.floor(col / cols) % 2 === (on ? 0 : 1);
 
-        const displayValue = isAltRow || isAltCol ? val : 0;
+        const displayValue = isAltRow || isAltCol ? speed : 0;
 
         return { value: displayValue, disabled: cell.disabled };
     });
