@@ -74,7 +74,7 @@
     <label for="speed"> Speed:</label>
     <input class="patternInput" type="text" id="speed" />
     <input class="checkbox" type="checkbox" id="rowOnOff" />
-    <label for="rowOnOff">On/Off</label>
+     <label for="rowOnOff">Reverse</label>
   </div>
   <div v-else-if="patternName === 'gradient' || patternName === 'Gradient'">
     <label for="min">Minimum:</label>
@@ -102,15 +102,18 @@
     <label for="speed">Speed:</label>
     <input class="patternInput" type="text" id="speed" />
     <input class="checkbox" type="checkbox" id="middleOnOff" />
-    <label for="middleOnOff">On/Off</label>
+    <label for="middleOnOff">Reverse</label>
   </div>
   <div v-else-if="patternName === 'Middle on' || patternName === 'middle on'">
     <label for="speed">Speed:</label>
     <input class="patternInput" type="text" id="speed" required />
-    <input class="checkbox" type="checkbox" id="middleOnOff" checked />
-    <label for="middleOnOff">On/Off</label>
+    <input class="checkbox" type="checkbox" id="middleOnOff" />
+    <label for="middleOnOff">Reverse</label>
   </div>
-
+  <div v-else-if="patternName === 'Fill' || patternName === 'fill'">
+    <label for="speed">Speed:</label>
+    <input class="patternInput" type="text" id="speed" required />
+  </div>
   <div v-else-if="patternName === 'grid' || patternName === 'Grid'">
     <label for="size">Size:</label>
     <input class="patternInput" type="text" id="size" />
@@ -221,7 +224,8 @@ export default {
             if (parseInt(speed) < 0 || parseInt(size) < 0) throw "too low";
             if (parseInt(speed) > 100 || parseInt(size) > 9) throw "too high";
 
-            this.singleRow(parseInt(size), parseInt(speed), check);
+            //this.singleRow(parseInt(size), parseInt(speed), check);
+            this.RowOn(parseInt(size), parseInt(speed), check);
             break;
           case "row off":
             var check = (<HTMLInputElement>document.getElementById("rowOnOff")).checked;
@@ -234,8 +238,8 @@ export default {
             if (parseInt(speed) < 0 || parseInt(size) < 0) throw "too low";
             if (parseInt(speed) > 100 || parseInt(size) > 9) throw "too high";
 
-            this.singleRow(parseInt(size), parseInt(speed), check);
-
+            //this.singleRow(parseInt(size), parseInt(speed), check);
+            this.RowOff(parseInt(size), parseInt(speed), check);
             break;
           case "alternate columns":
             var check = (<HTMLInputElement>document.getElementById("reverseAlt")).checked;
@@ -261,7 +265,8 @@ export default {
             if (parseInt(speed) < 0 || parseInt(size) < 0) throw "too low";
             if (parseInt(speed) > 100 || parseInt(size) > 9) throw "too high";
 
-            this.singleCol(parseInt(size), parseInt(speed), check);
+            //this.singleCol(parseInt(size), parseInt(speed), check);
+            this.colOn(parseInt(size), parseInt(speed), check);
             break;
           case "column off":
             var check = (<HTMLInputElement>document.getElementById("rowOnOff")).checked;
@@ -274,7 +279,8 @@ export default {
             if (parseInt(speed) < 0 || parseInt(size) < 0) throw "too low";
             if (parseInt(speed) > 100 || parseInt(size) > 9) throw "too high";
 
-            this.singleCol(parseInt(size), parseInt(speed), check);
+            //this.singleCol(parseInt(size), parseInt(speed), check);
+            this.colOff(parseInt(size), parseInt(speed), check);
             break;
           case "middle on":
             var check = (<HTMLInputElement>document.getElementById("middleOnOff"))
@@ -347,6 +353,16 @@ export default {
 
             this.gaussian(parseInt(mean), parseInt(sigma));
             break;
+          case "fill":
+            var speed = (<HTMLInputElement>document.getElementById("speed")).value;
+
+            if (speed == "") throw "empty";
+            if (!speed.match(/^[0-9]+$/)) throw "invalid";
+            if (isNaN(parseInt(speed))) throw "not a number";
+            if (parseInt(speed) < 0) throw "too low";
+            if (parseInt(speed) > 100) throw "too high";
+            this.fill(parseInt(speed));
+            break;
           default:
             (<HTMLInputElement>document.getElementById("pattern")).value = "";
         }
@@ -408,63 +424,194 @@ export default {
         }
       }
     },
-    singleRow(row: number, val: number, on: boolean) {
-      this.grid = this.grid.map((cell, index) => ({
-        value: on
-          ? Math.floor(index / 9) + 1 === row
-            ? val
-            : 0
-          : Math.floor(index / 9) + 1 === row
-          ? 0
-          : val,
-        disabled: cell.disabled,
-      }));
-    },
-    singleCol(col: number, val: number, on: boolean) {
-      this.grid = this.grid.map((cell, index) => ({
-        value: on ? (index % 9 === col - 1 ? val : 0) : index % 9 === col - 1 ? 0 : val,
-        disabled: cell.disabled,
-      }));
-    },
-    altRows(lines: number, val: number, on: boolean) {
-      this.grid = this.grid.map((cell, index) => ({
-        value: Math.floor(index / 9 / lines) % 2 === (on ? 0 : 1) ? val : 0,
-        disabled: cell.disabled,
-      }));
-    },
-    altCols(cols: number, val: number, on: boolean) {
-      this.grid = this.grid.map((cell, index) => ({
-        value: Math.floor((index % 9) / cols) % 2 === (on ? 0 : 1) ? val : 0,
-        disabled: cell.disabled,
-      }));
-    },
-    middle(val: number, on: boolean) {
-      const middleIndex = 40; // Index of the middle cell in a 9x9 grid
-      if (on) {
-        this.grid = this.grid.map((cell, index) => ({
-          value: index === middleIndex ? val : 0,
-          disabled: cell.disabled,
-        }));
-      } else {
-        this.grid = this.grid.map((cell, index) => ({
-          value: index === middleIndex ? 0 : val,
-          disabled: cell.disabled,
-        }));
+    fill(speed: number){
+      for (let i = 0; i < 9; i++) {
+        for (let j = 0; j < 9; j++) {
+          this.grid[9 * i + j] = { value: speed, disabled: false };
+        }
       }
     },
+    singleRow(row: number, val: number, on: boolean) {
+      this.clear();
+
+      for (let i = 0; i < 9; i++) {
+        const index = 9 * (row - 1) + i;
+        this.grid[index] = {
+          value: on ? (i === val - 1 ? val : 0) : (i === val - 1 ? 0 : val),
+          disabled: this.grid[index].disabled,
+        };
+      }
+    },
+  RowOn(row: number, val: number, rev: boolean) {
+  this.clear();
+  if (!rev){
+  for (let i = 0; i < 9; i++) {
+    const index = 9 * (row - 1) + i;
+    this.grid[index] = {
+      value: val,
+      disabled: this.grid[index].disabled,
+    };
+  }
+}
+else{
+for (let r = 0; r < 9; r++) {
+    for (let c = 0; c < 9; c++) {
+      const index = 9 * r + c;
+      if (r === (row - 1)) {
+        this.grid[index] = {
+          value: 0,
+          disabled: this.grid[index].disabled,
+        };
+      } else {
+        this.grid[index] = {
+          value: val,
+          disabled: this.grid[index].disabled,
+        };
+      }
+    }
+  }
+}
+},
+
+RowOff(row: number, val: number, rev: boolean) {
+  this.clear();
+  if (!rev){
+  for (let r = 0; r < 9; r++) {
+    for (let c = 0; c < 9; c++) {
+      const index = 9 * r + c;
+      if (r === (row - 1)) {
+        this.grid[index] = {
+          value: 0,
+          disabled: this.grid[index].disabled,
+        };
+      } else {
+        this.grid[index] = {
+          value: val,
+          disabled: this.grid[index].disabled,
+        };
+      }
+    }
+  }
+}
+else{
+  for (let i = 0; i < 9; i++) {
+    const index = 9 * (row - 1) + i;
+    this.grid[index] = {
+      value: val,
+      disabled: this.grid[index].disabled,
+    };
+  }
+}
+},
+
+
+    singleCol(col: number, val: number, on: boolean) {
+      this.clear();
+      for (let i = 0; i < 9; i++) {
+        const index = 9 * i + (col - 1);
+        this.grid[index] = {
+          value: on ? (i === val - 1 ? val : 0) : (i === val - 1 ? 0 : val),
+          disabled: this.grid[index].disabled,
+        };
+      }
+    },
+colOn(col: number, val: number, rev: boolean) {
+  this.clear();
+  if (!rev) {
+    for (let r = 0; r < 9; r++) {
+      const index = 9 * r + (col - 1);
+      this.grid[index] = {
+        value: val,
+        disabled: this.grid[index].disabled,
+      };
+    }
+  } else {
+    for (let r = 0; r < 9; r++) {
+      for (let c = 0; c < 9; c++) {
+        const index = 9 * r + c;
+        if (c === (col - 1)) {
+          this.grid[index] = {
+            value: 0,
+            disabled: this.grid[index].disabled,
+          };
+        } else {
+          this.grid[index] = {
+            value: val,
+            disabled: this.grid[index].disabled,
+          };
+        }
+      }
+    }
+  }
+},
+
+colOff(col: number, val: number, rev: boolean) {
+  this.clear();
+  if (!rev) {
+    for (let r = 0; r < 9; r++) {
+      for (let c = 0; c < 9; c++) {
+        const index = 9 * r + c;
+        if (c === (col - 1)) {
+          this.grid[index] = {
+            value: 0,
+            disabled: this.grid[index].disabled,
+          };
+        } else {
+          this.grid[index] = {
+            value: val,
+            disabled: this.grid[index].disabled,
+          };
+        }
+      }
+    }
+  } else {
+    for (let r = 0; r < 9; r++) {
+      const index = 9 * r + (col - 1);
+      this.grid[index] = {
+        value: val,
+        disabled: this.grid[index].disabled,
+      };
+    }
+  }
+},
+
+    altRows(lines: number, val: number, on: boolean) {
+      this.clear();
+      for (let i = 0; i < 81; i++) {
+        const rowIndex = Math.floor(i / 9);
+        this.grid[i].value = Math.floor(rowIndex / lines) % 2 === (on ? 0 : 1) ? val : 0;
+      }
+    },
+
+    altCols(cols: number, val: number, on: boolean) {
+      this.clear();
+      for (let i = 0; i < 81; i++) {
+        const colIndex = i % 9;
+        this.grid[i].value = Math.floor(colIndex / cols) % 2 === (on ? 0 : 1) ? val : 0;
+      }
+    },
+
+    middle(val: number, on: boolean) {
+      this.clear();
+      const middleIndex = 40; // Index of the middle cell in a 9x9 grid
+      this.grid[middleIndex].value = on ? val : 0;
+    },
+
     gridPattern(val: number, lines: number, cols: number, on: boolean) {
-      this.grid = this.grid.map((cell, index) => {
-        const row = Math.floor(index / 9);
-        const col = index % 9;
+      this.clear();
+      for (let i = 0; i < 81; i++) {
+        const row = Math.floor(i / 9);
+        const col = i % 9;
 
         const isAltRow = Math.floor(row / lines) % 2 === (on ? 0 : 1);
         const isAltCol = Math.floor(col / cols) % 2 === (on ? 0 : 1);
 
         const displayValue = isAltRow || isAltCol ? val : 0;
 
-        return { value: displayValue, disabled: cell.disabled };
-      });
+        this.grid[i].value = displayValue;
+      }
     },
+
     gradient(min: number, max: number, row: boolean, on: boolean) {
       const size = 9; // Size of the grid
 

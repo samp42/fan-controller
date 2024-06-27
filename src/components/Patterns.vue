@@ -44,6 +44,7 @@
         <div class="name" id="row_off">Row off</div>
       </div>
     </div>
+
     <div class="update">
       <div class="page">
         <RouterLink :to="{ path: '/', query: { pattern: 'Column on' } }">
@@ -60,7 +61,14 @@
         <div class="name" id="col_off">Column off</div>
       </div>
     </div>
-
+    <div class="update">
+      <div class="page">
+        <RouterLink :to="{ path: '/', query: { pattern: 'Fill' } }">
+          <img :src="fill" alt="fill" />
+        </RouterLink>
+        <div class="name" id="fill">Fill</div>
+    </div>
+  </div>
     <div class="update">
       <div class="page">
         <RouterLink :to="{ path: '/', query: { pattern: 'Middle on' } }">
@@ -111,6 +119,8 @@
       <div class="name" id="grid">Gaussian</div>
     </div>
   </div>
+
+
 </template>
 
 /*
@@ -186,4 +196,5 @@ import grid from "../assets/images/grid.png";
 import middle_on from "../assets/images/middle_on.png";
 import middle_off from "../assets/images/middle_off.png";
 import gaussian from "../assets/images/gaussian.png";
+import fill from "../assets/images/fill.png";
 </script>

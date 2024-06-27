@@ -9,18 +9,28 @@
     </div>
     <div>
       <input type="file" accept=".csv" @change="handleFileUpload" />
+      <!-- Error message -->
+      <span v-if="showFileUploadError" class="error-message">
+        Please upload a file
+      </span>
     </div>
-    <div class="navbar-select-container">
-      <button class="play-button action-button" @click="$emit('run')">
+    <div class="toggle-container">
+      <label class="toggle-label">
+        <span class="toggle-label-left">Static</span>
+        <input type="checkbox" v-model="dynamicMode" class="toggle-input">
+        <span class="toggle-slider"></span>
+        <span class="toggle-label-right">Dynamic</span>
+      </label>
+    </div>
+    <div class="action-buttons">
+      <button class="play-button action-button" @click="handlePlayButtonClick">
         <img src="../assets/play.svg" alt="play" class="img-icon" />
       </button>
       <button class="stop-button action-button" @click="$emit('stop')">
         <img src="../assets/stop.svg" alt="stop" class="img-icon" />
       </button>
-      <!-- <button @click="time()">Time</button> -->
-      <!-- <button class="refresh-button action-button" @click="list">
-        <img src="../assets/arrow-clockwise.svg" alt="refresh" class="img-icon"/>
-      </button> -->
+    </div>
+    <div class="navbar-select-container">
       <Select :select-options="ports" v-if="ports.length !== 0"></Select>
       <img v-else src="../assets/loader.svg" alt="loader" style="height: 50px" />
     </div>
@@ -28,45 +38,43 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
-import { invoke } from "@tauri-apps/api";
-import Select from "./Select.vue";
-import Papa from "papaparse";
-import { InstantProfile, PatternType, useGridStore } from "../store";
+import { ref, onMounted } from 'vue';
+import { RouterLink } from 'vue-router';
+import { invoke } from '@tauri-apps/api';
+import Select from './Select.vue';
+import Papa from 'papaparse';
+import { InstantProfile, PatternType, useGridStore } from '../store';
 
 const ports = ref([]);
+const dynamicMode = ref(false);
+const store = useGridStore();
+const emit = defineEmits(['run', 'stop']);
+let fileUploaded = false;
+const showFileUploadError = ref(false); // Reactive variable for error message
 
 function list(): void {
-  invoke("list_serial_ports").then((p: any) => {
+  invoke('list_serial_ports').then((p: any) => {
     ports.value = p;
-    console.log(p)
+    console.log(p);
   });
 }
-
-// function time(): void {
-//   const store = useGridStore();
-//   invoke("get_timing", { port: store.port }).then((p: any) => {
-//     console.log(p);
-//   });
-// }
 
 function handleFileUpload(event: any) {
   const file = event.target.files[0];
 
   Papa.parse(file, {
     complete: (results: any) => {
-      // Extracting data from parsed CSV
       const parsedData = results.data;
 
       const instantProfiles: InstantProfile[] = parsedData
         .map(mapRowToInstantProfile)
         .filter((profile: InstantProfile | null) => profile !== null);
 
-      const store = useGridStore();
       store.pattern = { profiles: instantProfiles };
-      store.usePatternType = PatternType.Dynamic;
+      store.usePatternType = dynamicMode.value ? PatternType.Dynamic : PatternType.Static;
 
-      console.log(store.pattern);
+      console.log('Parsed pattern:', store.pattern);
+      fileUploaded = true; // Set fileUploaded flag to true
     },
     header: true, // Set to true if your CSV file has headers
   });
@@ -84,11 +92,27 @@ function mapRowToInstantProfile(row: any): InstantProfile | null {
   };
 
   for (let i = 1; i <= 81; i++) {
-    const fanColumnName = "fan" + i;
+    const fanColumnName = 'fan' + i;
     profile.fans.push(parseInt(row[fanColumnName]));
   }
 
   return profile;
+}
+
+function handlePlayButtonClick() {
+  if (dynamicMode.value && !fileUploaded) {
+    // Show error message if dynamic mode is selected but no file uploaded
+    showFileUploadError.value = true;
+  } else {
+    // Reset error message state
+    showFileUploadError.value = false;
+
+    // Proceed to run pattern
+    store.setPatternType(dynamicMode.value ? PatternType.Dynamic : PatternType.Static);
+    console.log('Running pattern:', dynamicMode.value ? 'Dynamic' : 'Static');
+    console.log('Store pattern:', store.pattern);
+    emit('run');
+  }
 }
 
 onMounted(() => {
@@ -108,11 +132,6 @@ onMounted(() => {
   box-shadow: 0 -2px 8px 4px #333;
 }
 
-.header-elements {
-  display: flex;
-  flex-direction: row;
-}
-
 .button-container {
   margin-left: 12px;
 }
@@ -122,15 +141,6 @@ onMounted(() => {
   border: none;
   box-shadow: none;
   border-radius: 0;
-  color: white;
-  height: 100%;
-  margin-right: 12px;
-}
-
-.refresh-button {
-  border: none;
-  box-shadow: none;
-
   color: white;
   height: 100%;
   margin-right: 12px;
@@ -156,57 +166,60 @@ onMounted(() => {
   color: rgb(0, 208, 255);
 }
 
-.dropdown-button {
-  width: 100%;
-  background: none;
-  border: none;
-  box-shadow: none;
-  text-align: left;
-  border-radius: 0;
+.toggle-label {
+  position: relative;
+  display: inline-block;
+  width: 150px; /* Adjust width as needed */
+  height: 45px; /* Adjust height as needed */
+  /*background-color: #cccccc78; /* Background color of the toggle switch */
+  background-color:#65656598;
+  border-radius: 4px; /* Rounded corners */
+  padding: 2px; /* Adjust padding as needed */
+  cursor: pointer;
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
 }
 
-.dropdown-button:hover {
-  background-color: #eee;
+.toggle-label-left{
+  display: inline-block;
+  padding: 9px; /* Adjust padding as needed */
+  font-size: 15px; /* Adjust font size as needed */
+  color: #171616; /* Text color */
+}
+.toggle-label-right {
+  display: inline-block;
+  padding: 9px; /* Adjust padding as needed */
+  font-size: 15px; /* Adjust font size as needed */
+  color: #171616; /* Text color */
 }
 
-.dropdown-button:active {
-  background-color: #aaa;
-}
-
-ul {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-}
-
-li {
-  float: left;
-}
-
-.dropContent {
-  display: none;
+.toggle-slider {
   position: absolute;
-  background-color: #f9f9f9;
-  min-width: 160px;
-  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-  z-index: 1;
-  top: 54px;
+  top: 1px;
+  left: 2px;
+  width: calc(50% - 3px);
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.516); /* Slider color */
+  border-radius: 2px; /* Rounded corners */
+  transition: 0.5s; /* Smooth animation */
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
 }
 
-.dropContent a {
-  color: black;
-  padding: 12px 16px;
-  text-decoration: none;
-  display: block;
-  text-align: left;
+.toggle-input {
+  display: none;
 }
 
-.dropContent a:hover {
-  background-color: #eee;
+.toggle-input:checked + .toggle-slider {
+  transform: translateX(calc(100% - 4px));
 }
 
-.dropdown:hover .dropContent {
-  display: block;
+.error-message {
+  color: red;
+  font-size: 14px;
+  margin-left: 1px;
+}
+
+.toggle-container {
+  margin-right: 12px;
 }
 
 .navbar-select-container {

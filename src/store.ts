@@ -22,4 +22,9 @@ export const useGridStore = defineStore('grid', {
     port: "/dev/cu.usbmodem149464201",
     usePatternType: PatternType.Static,
   }),
+  actions: {
+    setPatternType(type: PatternType) {
+      this.usePatternType = type;
+    },
+  },
 });
