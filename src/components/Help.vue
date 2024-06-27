@@ -13,7 +13,7 @@ import BackButton from "./BackButton.vue";
     <div class="help-content-container">
       <h2>Running a pattern</h2>
       <p>
-        To run a pattern, either a dynamic (CSV) pattern or a static pattern and a port
+        To run a pattern, either a dynamic (CSV) pattern or a static pattern, a port
         must be selected. This section explains how to do both. Once a pattern and a port
         have been selected, you can click on the play button in the header to run the
         pattern. The pattern will run in a loop. To stop the pattern, click on the stop
@@ -31,6 +31,7 @@ import BackButton from "./BackButton.vue";
         of the port should be "/dev/cu.usbmodem149464201".
       </p>
       <h3>Selecting a pattern</h3>
+      <p> The toggle switch in  the header is used to choose between running a static or a dynamic pattern.</p>
       <h4>Static pattern</h4>
       <p>
         To select a static pattern, go into the Patterns page by clicking on the link in
