@@ -39,22 +39,34 @@ export function checkerBoard(size: number, speed: number, rev: boolean): Cell[] 
     return grid;
 }
 
-export function singleRow(row: number, speed: number, on: boolean): Cell[] {
+export function rows(row: number, speed: number, size: number, on: boolean): Cell[] {
     let grid: Cell[] = initEmptyGrid();
 
-    return grid.map((cell, index) => ({
-        value: on
-            ? Math.floor(index / 9) + 1 === row
-                ? speed
-                : 0
-            : Math.floor(index / 9) + 1 === row
-                ? 0
-                : speed,
-        disabled: cell.disabled,
+    // return grid.map((cell, index) => ({
+    //     value: on
+    //         ? Math.floor(index / 9) + 1 === row
+    //             ? speed
+    //             : 0
+    //         : Math.floor(index / 9) + 1 === row
+    //             ? 0
+    //             : speed,
+    //     disabled: cell.disabled,
+    // }));
+
+    // return grid.map((cell, index) => {
+    //     const rowNumber = Math.floor(index / 9) + 1;
+    //     const displayValue = rowNumber === row && on ? speed : 0;
+
+    //     return { value: displayValue, disabled: cell.disabled };
+    // });
+
+    return grid.map((_, index) => ({
+        value: Math.floor(index / 9) + 1 === row ? speed : 0,
+        disabled: false,
     }));
 }
 
-export function singleCol(col: number, val: number, on: boolean): Cell[] {
+export function cols(col: number, val: number, size: number, on: boolean): Cell[] {
     let grid: Cell[] = initEmptyGrid();
 
     return grid.map((cell, index) => ({
@@ -81,7 +93,7 @@ export function altCols(cols: number, speed: number, on: boolean): Cell[] {
     }));
 }
 
-export function middle(speed: number, on: boolean): Cell[] {
+export function jetFlow(speed: number, on: boolean): Cell[] {
     let grid: Cell[] = initEmptyGrid();
 
     const middleIndex = 40; // Index of the middle cell in a 9x9 grid
@@ -116,7 +128,7 @@ export function gridPattern(speed: number, lines: number, cols: number, on: bool
     });
 }
 
-export function gradient(min: number, max: number, row: boolean, on: boolean): Cell[] {
+export function gradient(min: number, max: number, row: boolean, orientation: boolean): Cell[] {
     let grid: Cell[] = initEmptyGrid();
 
     const size = 9; // Size of the grid
@@ -131,7 +143,7 @@ export function gradient(min: number, max: number, row: boolean, on: boolean): C
                 (max - min) * (invertedPosition / (size - 1)) + min
             );
 
-            const displayValue = on ? gradientValue : invertedGradientValue;
+            const displayValue = orientation ? gradientValue : invertedGradientValue;
 
             grid[size * i + j] = { value: displayValue, disabled: false };
         }

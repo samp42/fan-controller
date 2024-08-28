@@ -32,6 +32,10 @@
                 <label for="speed"> Speed:</label>
                 <input class="patternInput" type="text" id="speed" v-model="speed" />
             </div>
+            <div v-if="displayPosition()" class="input-inner">
+                <label for="size">Position:</label>
+                <input class="patternInput" type="text" id="size" v-model="position" />
+            </div>
             <div v-if="displayMinMax()" class="input-inner">
                 <label for="min">Minimum:</label>
                 <input class="patternInput" type="number" id="min" min="0" max="100" v-model="minimum" />
@@ -41,6 +45,10 @@
             <div v-if="displayReverse()" class="input-inner">
                 <input class="checkbox" type="checkbox" id="check" v-model="reverse" />
                 <label for="check">Reverse</label>
+            </div>
+            <div v-if="displayRowCol()" class="input-inner">
+                <input class="checkbox" type="checkbox" id="rowCol" v-model="rowCol" />
+                <label for="rowCol">Rows / columns</label>
             </div>
             <div v-if="displayOnOff()" class="input-inner">
                 <input class="checkbox" type="checkbox" id="rowOnOff" />
@@ -53,82 +61,7 @@
                 <input class="patternInput" type="text" id="sigma" v-model="sigma" />
             </div>
         </div>
-        <!-- <div v-if="patternName === 'checkerboard' || patternName === 'Checkerboard'">
-            <label for="size">Size:</label>
-            <input class="patternInput" type="text" id="size" />
-            <label for="speed"> Speed:</label>
-            <input class="patternInput" type="text" id="speed" />
-            <input class="checkbox" type="checkbox" id="check" />
-            <label for="check">Reverse</label>
-        </div>
 
-        <div v-else-if="patternName === 'Alternate rows' ||
-            patternName === 'alternate rows' ||
-            patternName === 'Alternate columns' ||
-            patternName === 'alternate columns'
-            ">
-            <label for="size">Size:</label>
-            <input class="patternInput" type="text" id="size" />
-            <label for="speed"> Speed:</label>
-            <input class="patternInput" type="text" id="speed" />
-            <input class="checkbox" type="checkbox" id="reverseAlt" />
-            <label for="reverseAlt">Reverse</label>
-        </div>
-        <div v-else-if="patternName === 'Row on' ||
-            patternName === 'row on' ||
-            patternName === 'Row off' ||
-            patternName === 'row off' ||
-            patternName === 'Column on' ||
-            patternName === 'column on' ||
-            patternName === 'Column off' ||
-            patternName === 'column off'
-            ">
-            <label for="size">Position:</label>
-            <input class="patternInput" type="text" id="size" />
-            <label for="speed"> Speed:</label>
-            <input class="patternInput" type="text" id="speed" />
-            <input class="checkbox" type="checkbox" id="rowOnOff" />
-            <label for="rowOnOff">On/Off</label>
-        </div>
-        <div v-else-if="patternName === 'gradient' || patternName === 'Gradient'">
-            <label for="min">Minimum:</label>
-            <input class="patternInput" type="number" id="min" min="0" max="100" v-model="minimum"/>
-            <label for="max"> Maximum:</label>
-            <input class="patternInput" type="text" id="max" min="0" max="100" v-model="maximum"/>
-            <input class="checkbox" type="checkbox" id="rowCol" />
-            <label for="rowCol">Row:</label>
-            <input class="checkbox" type="checkbox" id="gradientReverse" />
-            <label for="gradientReverse">Reverse:</label>
-        </div>
-
-        <div v-else-if="patternName === 'random' || patternName === 'Random'"></div>
-        <div v-else-if="patternName === 'Middle off' || patternName === 'middle off'">
-            <label for="speed">Speed:</label>
-            <input class="patternInput" type="text" id="speed" />
-            <input class="checkbox" type="checkbox" id="middleOnOff" />
-            <label for="middleOnOff">On/Off</label>
-        </div>
-        <div v-else-if="patternName === 'Middle on' || patternName === 'middle on'">
-            <label for="speed">Speed:</label>
-            <input class="patternInput" type="text" id="speed" required />
-            <input class="checkbox" type="checkbox" id="middleOnOff" checked />
-            <label for="middleOnOff">On/Off</label>
-        </div>
-
-        <div v-else-if="patternName === 'grid' || patternName === 'Grid'">
-            <label for="size">Size:</label>
-            <input class="patternInput" type="text" id="size" />
-            <label for="speed"> Speed:</label>
-            <input class="patternInput" type="text" id="speed" />
-            <input class="checkbox" type="checkbox" id="grid" />
-            <label for="grid">Reverse</label>
-        </div>
-        <div v-else-if="patternName === 'gaussian' || patternName === 'Gaussian'">
-            <label for="mean">Mean:</label>
-            <input class="patternInput" type="text" id="mean" />
-            <label for="sigma"> Sigma:</label>
-            <input class="patternInput" type="text" id="sigma" />
-        </div> -->
         <span class="br"></span>
         <div class="button-container">
             <button type="button" @click="clear()">Clear</button>
@@ -140,11 +73,11 @@
 </template>
 
 <script setup lang="ts">
-import { PatternType, useGridStore } from "../store";
+import { useGridStore } from "../store";
 import { ref } from "vue";
 import { useRoute } from "vue-router";
 import { Cell } from "../cell";
-import { initEmptyGrid, altCols, altRows, checkerBoard, gaussian, gradient, gridPattern, middle, randomFill, singleCol, singleRow } from "../patterns";
+import { initEmptyGrid, altCols, altRows, checkerBoard, gaussian, gradient, gridPattern, jetFlow, randomFill, rows, cols } from "../patterns";
 
 const route = useRoute();
 let gridStore = useGridStore();
@@ -166,33 +99,48 @@ let reverse = ref<boolean>(false);
 
 // functions
 function displayMinMax(): boolean {
-    return patternName.value.toLowerCase() === "gradient";
+    const pattern = patternName.value.toLowerCase();
+
+    return pattern === "gradient";
 }
 
 function displaySize(): boolean {
-    return patternName.value.toLowerCase() === "checkerboard";
+    const pattern = patternName.value.toLowerCase();
+
+    return pattern === "checkerboard" || pattern === "alternate rows" ||
+        pattern === "alternate columns";
 }
 
 function displayReverse(): boolean {
-    return patternName.value.toLowerCase() === "checkerboard" || patternName.value.toLowerCase() === "alternate rows" ||
-        patternName.value.toLowerCase() === "alternate columns" || patternName.value.toLowerCase() === "single row" ||
-        patternName.value.toLowerCase() === "single column";
+    const pattern = patternName.value.toLowerCase();
+
+    return pattern === "checkerboard" || pattern === "alternate rows" || pattern === "alternate columns" ||
+        pattern === "row(s) on/off" || pattern === "column(s) on/off" || pattern === "gradient";
+}
+
+function displayRowCol(): boolean {
+    const pattern = patternName.value.toLowerCase();
+
+    return pattern === "gradient";
 }
 
 function displaySpeed(): boolean {
     const pattern = patternName.value.toLowerCase();
 
     return pattern === "checkerboard" || pattern === "alternate rows" || pattern === "alternate columns" ||
-        pattern === "middle on" || pattern === "middle off" || pattern === "grid" || pattern === "row on" ||
-        pattern === "row off" || pattern === "row on" || pattern === "column on" || pattern === "column off";
+        pattern === "jet flow" || pattern === "grid" || pattern === "row(s) on/off" || pattern === "column(s) on/off";
+}
+
+function displayOnOff(): boolean {
+    const pattern = patternName.value.toLowerCase();
+
+    return pattern === "row(s) on/off" || pattern === "column(s) on/off";
 }
 
 function displayPosition(): boolean {
-    return true;
-}
+    const pattern = patternName.value.toLowerCase();
 
-function displayRowCol(): boolean {
-    return true;
+    return pattern === "jet flow" || pattern === "row(s) on/off" || pattern === "column(s) on/off";
 }
 
 function displayGaussian(): boolean {
@@ -236,24 +184,6 @@ function checkInput(row: number, col: number, target: any): void {
 
     grid.value = tempGrid;
 
-    // grid.value[index].value = target.value;
-    // const inputValue = grid.value[index].value;
-
-    // const num = parseInt(`${inputValue}`) | 0;
-
-    // if (
-    //     typeof inputValue === "string" ||
-    //     isNaN(inputValue) ||
-    //     inputValue < 0 ||
-    //     inputValue > 100
-    // ) {
-    //     const numOnly = parseInt(inputValue.toString().replace(/[^0-9]/g, "")) | 0;
-
-    //     grid.value[index] = { ...grid.value[index], value: numOnly, disabled: false };
-    //     gridStore.usePatternType = PatternType.Static;
-    //     gridStore.grid = grid.value;
-    // }
-
     grid.value[index].value
     gridStore.grid = grid.value;
 }
@@ -277,23 +207,14 @@ function getPatternFromList(): void {
         case "alternate columns":
             grid.value = altCols(size.value, speed.value, reverse.value);
             break;
-        case "row on":
-            grid.value = singleRow(size.value, speed.value, reverse.value)
+        case "row(s) on/off":
+            grid.value = rows(position.value, speed.value, reverse.value)
             break;
-        case "row off":
-            grid.value = singleRow(size.value, speed.value, reverse.value);
+        case "column(s) on/off":
+            grid.value = cols(position.value, speed.value, reverse.value);
             break;
-        case "column on":
-            grid.value = singleCol(size.value, speed.value, reverse.value);
-            break;
-        case "column off":
-            grid.value = singleCol(size.value, speed.value, reverse.value);
-            break;
-        case "middle on":
-            grid.value = middle(speed.value, true);
-            break;
-        case "middle off":
-            grid.value = middle(speed.value, false);
+        case "jet flow":
+            grid.value = jetFlow(position.value, speed.value, size.value, reverse.value);
             break;
         case "grid":
             grid.value = gridPattern(speed.value, size.value, size.value, reverse.value);
