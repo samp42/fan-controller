@@ -62,13 +62,13 @@
             </div>
         </div>
 
-        <span class="br"></span>
         <div class="button-container">
             <button type="button" @click="clear()">Clear</button>
             <button type="button" @click="getPatternFromList()">Enter</button>
             <p id="p" class="err" style="color: red; font-weight: bold"></p>
         </div>
-        <span class="br"></span>
+
+        <img src='../assets/red_on_white.png' alt='McGill Logo' style='margin-top: 10px;'/>
     </div>
 </template>
 
@@ -524,6 +524,7 @@ td {
     border: 1px solid transparent;
     box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
     font-weight: bold;
+    margin-bottom: 10px;
 }
 
 .button {
