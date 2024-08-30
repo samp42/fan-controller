@@ -24,17 +24,25 @@
         </div>
         <span class="br"></span>
         <div class="input-container">
+            <div v-if='displayXY()' class="input-inner">
+                <label for="x">X:</label>
+                <input class="patternInput" type="number" id="x" min="1" max="9" v-model="x" />
+            </div>
+            <div v-if='displayXY()' class="input-inner">
+                <label for="y">Y:</label>
+                <input class="patternInput" type="number" id="y" min="1" max="9" v-model="y" />
+            </div>
             <div v-if="displaySize()" class="input-inner">
                 <label for="size">Size:</label>
                 <input class="patternInput" type="number" id="size" min="1" max="9" v-model="size" />
             </div>
             <div v-if="displaySpeed()" class="input-inner">
-                <label for="speed"> Speed:</label>
+                <label for="speed">Speed:</label>
                 <input class="patternInput" type="text" id="speed" v-model="speed" />
             </div>
             <div v-if="displayPosition()" class="input-inner">
-                <label for="size">Position:</label>
-                <input class="patternInput" type="text" id="size" v-model="position" />
+                <label for="position">Position:</label>
+                <input class="patternInput" type="text" id="position" v-model="position" />
             </div>
             <div v-if="displayMinMax()" class="input-inner">
                 <label for="min">Minimum:</label>
@@ -89,6 +97,8 @@ let errorMessage = ref<string>("");
 // pattern parameters
 let minimum = ref<number>(0);
 let maximum = ref<number>(100);
+let x = ref<number>(1);
+let y = ref<number>(1);
 let size = ref<number>(1);
 let speed = ref<number>(0);
 let position = ref<number>(5);
@@ -107,7 +117,7 @@ function displayMinMax(): boolean {
 function displaySize(): boolean {
     const pattern = patternName.value.toLowerCase();
 
-    return pattern === "checkerboard" || pattern === "alternate rows" ||
+    return pattern === "jet flow" || pattern === "checkerboard" || pattern === "alternate rows" ||
         pattern === "alternate columns";
 }
 
@@ -115,7 +125,7 @@ function displayReverse(): boolean {
     const pattern = patternName.value.toLowerCase();
 
     return pattern === "checkerboard" || pattern === "alternate rows" || pattern === "alternate columns" ||
-        pattern === "row(s) on/off" || pattern === "column(s) on/off" || pattern === "gradient";
+        pattern === "row(s) on/off" || pattern === "column(s) on/off" || pattern === "gradient" || pattern === "jet flow";
 }
 
 function displayRowCol(): boolean {
@@ -140,7 +150,13 @@ function displayOnOff(): boolean {
 function displayPosition(): boolean {
     const pattern = patternName.value.toLowerCase();
 
-    return pattern === "jet flow" || pattern === "row(s) on/off" || pattern === "column(s) on/off";
+    return pattern === "row(s) on/off" || pattern === "column(s) on/off";
+}
+
+function displayXY(): boolean {
+    const pattern = patternName.value.toLowerCase();
+
+    return pattern === "jet flow";
 }
 
 function displayGaussian(): boolean {
@@ -214,7 +230,7 @@ function getPatternFromList(): void {
             grid.value = cols(position.value, speed.value, reverse.value);
             break;
         case "jet flow":
-            grid.value = jetFlow(position.value, speed.value, size.value, reverse.value);
+            grid.value = jetFlow(x.value, y.value, size.value, speed.value, reverse.value);
             break;
         case "grid":
             grid.value = gridPattern(speed.value, size.value, size.value, reverse.value);
@@ -243,13 +259,14 @@ input::-webkit-inner-spin-button {
 /* Firefox */
 input[type=number] {
     -moz-appearance: textfield;
+    appearance: textfield;
 }
 
 .input-container {
     display: flex;
     flex: 1;
     justify-content: center;
-    align-items: center
+    align-items: baseline;
 }
 
 .input-inner {
@@ -356,7 +373,7 @@ td {
     margin-bottom: 10px;
     font-size: 16px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    width: 100px;
+    width: 60px;
 }
 
 .white {

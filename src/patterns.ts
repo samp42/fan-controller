@@ -93,20 +93,19 @@ export function altCols(cols: number, speed: number, on: boolean): Cell[] {
     }));
 }
 
-export function jetFlow(speed: number, on: boolean): Cell[] {
+export function jetFlow(x: number, y: number, size: number, speed: number, on: boolean): Cell[] {
     let grid: Cell[] = initEmptyGrid();
 
-    const middleIndex = 40; // Index of the middle cell in a 9x9 grid
-    if (on) {
-        grid = grid.map((cell, index) => ({
-            value: index === middleIndex ? speed : 0,
-            disabled: cell.disabled,
-        }));
-    } else {
-        grid = grid.map((cell, index) => ({
-            value: index === middleIndex ? 0 : speed,
-            disabled: cell.disabled,
-        }));
+    // x
+    for(let i = 1; i < 10; i++) {
+        // y
+        for(let j = 1; j < 10; j++) {
+            // const displayValue = on ? (i === x - 1 && j === y - 1 ? 0 : speed) : (i === x - 1 && j === y - 1 ? speed : 0);
+            const inRegion: boolean = (i >= x && i <= x+size) && (j >= y && j <= y+size);
+            const displayValue = on && inRegion ? speed : 0;
+
+            grid[9 * j + i] = { value: displayValue, disabled: false };
+        }
     }
 
     return grid;
